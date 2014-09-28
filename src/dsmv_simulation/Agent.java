@@ -2,29 +2,33 @@ package dsmv_simulation;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Agent {
     
     private final int age;
-    private final Place working_place;
-    private final Place home_place;
+    private final double leisureProb;
+    private final Place workingPlace;
+    private final Place homePlace;
     private final Activities activities;
-    private Place current_place;
+    private Place currentPlace;
     private Activity current_activity;
     private List<Agent> friends;
     private boolean isReserved;
     private int current_activity_hours[];
     
     
-    public Agent(int age, Place working_place, Place home_place, int activity_hours[]){
+    public Agent(int age, Place workingPlace, Place homePlace, int activity_hours[], double leisureProb){
         this.age = age;
-        this.working_place = working_place;
-        this.home_place = home_place;
+        this.workingPlace = workingPlace;
+        this.homePlace = homePlace;
         this.activities = new Activities(activity_hours);
         this.friends = new ArrayList<>();
         this.current_activity = Activity.WORKING;
         this.isReserved = false;
         this.current_activity_hours = activity_hours.clone();
+        this.leisureProb = leisureProb;
+        this.reset();
     }
     
     public Activities getActivities(){
@@ -32,19 +36,19 @@ public class Agent {
     }
     
     public Place getWorkingArea(){
-        return this.working_place;
+        return this.workingPlace;
     }
             
     public Place getHomeArea(){
-        return this.home_place;
+        return this.homePlace;
     }        
     
     public void setCurrentArea(Place p){
-        this.current_place = p;
+        this.currentPlace = p;
     }
     
     public Place getCurrentPlace(){
-        return this.current_place;
+        return this.currentPlace;
     }
     
     public Activity getCurrentActivity(){
@@ -60,24 +64,52 @@ public class Agent {
     }
     
     private void goHome(){
-        this.current_place = this.home_place;
+        this.currentPlace = this.homePlace;
     }
     
     public void clock(){
-        Activity nextActivity = getNextActivity(this.current_activity);
-        this.current_activity = nextActivity;
+        if(current_activity_hours[4]==1)
+            reset();
+        else{
+            Activity nextActivity = getNextActivity(this.current_activity);
+            this.current_activity = nextActivity;
+        }
     }
     
-    public void reset(){
+    private void reset(){
+        this.current_activity = Activity.WORKING;
         this.current_activity_hours = activities.getActivityHours();
+        boolean haveLeisure = makeLeisureDecision(this.leisureProb);
+        if(!haveLeisure){
+            this.current_activity_hours[2] = 0;
+            this.current_activity_hours[3] += this.activities.getLeisuringHours();
+        }
+    }
+    
+    private boolean makeLeisureDecision(double threshold){
+        double p = new Random().nextDouble();
+        if(p<=threshold)
+            return true;
+        return false;
     }
     
     private Activity getNextActivity(Activity currentActivity){
         Activity nextActivity = currentActivity;
         this.current_activity_hours[currentActivity.getValue()]--;
-        if(this.current_activity_hours[currentActivity.getValue()]==0)
-            nextActivity = Activity.values()[(currentActivity.getValue()+1)%5];
+        if(this.current_activity_hours[currentActivity.getValue()]<=0)
+            nextActivity = getNextInOrderActivity(currentActivity);
         return nextActivity;
     }
     
+    private Activity getNextInOrderActivity(Activity currentActivity){
+        Activity nextActivity = currentActivity;
+        for(int i=1;i<=5;i++){
+            if(this.current_activity_hours[(currentActivity.getValue()+i)%5]>0){
+                nextActivity = Activity.values()[(currentActivity.getValue()+i)%5];
+                break;
+            }     
+        }
+        return nextActivity;
+    }
+ 
 }
