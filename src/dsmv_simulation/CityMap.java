@@ -19,8 +19,6 @@ public class CityMap {
     };
     
     public CityMap(String areas[]){
-        for (int i=0;i<areas.length;i++){
-            this.areas.add(areas[i])
-        }
+       
     }
 }

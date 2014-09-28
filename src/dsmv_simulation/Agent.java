@@ -6,44 +6,45 @@ import java.util.List;
 public class Agent {
     
     private final int age;
-    
-    // Change the working/home area to the class of Place
-    private final int working_area;
-    private final int home_area;
-    private final List<Agent> friends;
+    private final Place working_place;
+    private final Place home_place;
     private final Activities activities;
-    private int current_area;
+    private Place current_place;
     private Activity current_activity;
+    private List<Agent> friends;
     private boolean isReserved;
+    private int current_activity_hours[];
     
-    public Agent(int age, int working_area, int home_area, int activity_hours[]){
+    
+    public Agent(int age, Place working_place, Place home_place, int activity_hours[]){
         this.age = age;
-        this.working_area = working_area;
-        this.home_area = home_area;
+        this.working_place = working_place;
+        this.home_place = home_place;
         this.activities = new Activities(activity_hours);
         this.friends = new ArrayList<>();
-        this.current_activity = Activity.SLEEPING;
+        this.current_activity = Activity.WORKING;
         this.isReserved = false;
+        this.current_activity_hours = activity_hours.clone();
     }
     
     public Activities getActivities(){
         return this.activities;
     }
     
-    public int getWorkingArea(){
-        return this.working_area;
+    public Place getWorkingArea(){
+        return this.working_place;
     }
             
-    public int getHomeArea(){
-        return this.home_area;
+    public Place getHomeArea(){
+        return this.home_place;
     }        
     
-    public void setCurrentArea(int area_id){
-        this.current_area = area_id;
+    public void setCurrentArea(Place p){
+        this.current_place = p;
     }
     
-    public int getCurrentArea(){
-        return this.current_area;
+    public Place getCurrentPlace(){
+        return this.current_place;
     }
     
     public Activity getCurrentActivity(){
@@ -54,7 +55,29 @@ public class Agent {
         this.current_activity = activity;
     }
     
-    private void goHome(){
-        this.current_area = this.home_area;
+    public void addFriend(Agent a){
+        this.friends.add(a);
     }
+    
+    private void goHome(){
+        this.current_place = this.home_place;
+    }
+    
+    public void clock(){
+        Activity nextActivity = getNextActivity(this.current_activity);
+        this.current_activity = nextActivity;
+    }
+    
+    public void reset(){
+        this.current_activity_hours = activities.getActivityHours();
+    }
+    
+    private Activity getNextActivity(Activity currentActivity){
+        Activity nextActivity = currentActivity;
+        this.current_activity_hours[currentActivity.getValue()]--;
+        if(this.current_activity_hours[currentActivity.getValue()]==0)
+            nextActivity = Activity.values()[(currentActivity.getValue()+1)%5];
+        return nextActivity;
+    }
+    
 }
