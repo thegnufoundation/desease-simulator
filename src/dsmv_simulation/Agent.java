@@ -101,15 +101,16 @@ public class Agent {
     }
     
     private void reset(){
+        this.goHome();
         this.isReserved = false;
-        this.current_activity = Activity.WORKING;
+        this.current_activity = Activity.SLEEPING;
         this.currentActivityHours = new Activities(activities.getActivityHours());
         boolean haveLeisure = makeLeisureDecision(this.leisureProb);
         if(!haveLeisure){
             this.currentActivityHours.setLeisuringHours(0);
             this.currentActivityHours.setRestingHours
                                       (this.activities.getLeisuringHours()
-                                       +this.activities.getRestingHours());
+                                       + this.activities.getRestingHours());
         }
     }
     

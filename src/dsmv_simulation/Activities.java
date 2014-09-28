@@ -104,8 +104,10 @@ public class Activities {
     }
     
     public boolean hoursLeft(){
-        if(this.activity_hours[4]>1)
+        for(int i=0;i<5;i++){
+            if(this.activity_hours[i]>1)
                 return true;
+        }
         return false;
     }
     
