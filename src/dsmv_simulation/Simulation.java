@@ -9,7 +9,7 @@ package dsmv_simulation;
  *
  * @author chris
  */
-public class DSMV_Simulation {
+public class Simulation {
 
     /**
      * @param args the command line arguments
@@ -20,7 +20,7 @@ public class DSMV_Simulation {
         Place work = new Place(Area.BONI,1);
         Agent a = new Agent(20,home,work,new int[]{7,2,3,4,8},0.3);
         Activity activity;
-        for(int i=0;i<50;i++){
+        for(int i=0;i<120;i++){
             activity = a.getCurrentActivity();
             System.out.println(activity.getValue());
             a.clock();
