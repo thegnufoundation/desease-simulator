@@ -17,6 +17,7 @@ public class Agent {
     private boolean isReserved;
     private int current_activity_hours[];
     
+    private Activities current_activity_hours;
     
     public Agent(int age, Place workingPlace, Place homePlace, int activity_hours[], double leisureProb){
         this.age = age;
@@ -24,8 +25,6 @@ public class Agent {
         this.homePlace = homePlace;
         this.activities = new Activities(activity_hours);
         this.friends = new ArrayList<>();
-        this.current_activity = Activity.WORKING;
-        this.isReserved = false;
         this.current_activity_hours = activity_hours.clone();
         this.leisureProb = leisureProb;
         this.reset();
@@ -77,6 +76,7 @@ public class Agent {
     }
     
     private void reset(){
+        this.isReserved = false;
         this.current_activity = Activity.WORKING;
         this.current_activity_hours = activities.getActivityHours();
         boolean haveLeisure = makeLeisureDecision(this.leisureProb);
