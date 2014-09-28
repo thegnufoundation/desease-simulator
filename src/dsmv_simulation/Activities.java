@@ -79,6 +79,18 @@ public class Activities {
         this.activity_hours[4]--;
     }
     
+    public void set(int i, int value){
+        this.activity_hours[i] = value;
+    }
+    
+    public void decrease(int i){
+        this.activity_hours[i]--;
+    }    
+    
+    public void increase(int i){
+        this.activity_hours[i]++;
+    }
+    
     public int getWorkingHours(){
         return this.activity_hours[0];
     }
@@ -102,6 +114,9 @@ public class Activities {
     public int[] getActivityHours(){
         return this.activity_hours.clone();
     }
+    public int get(int i){
+        return this.activity_hours[i];
+    }   
     
     public boolean hoursLeft(){
         for(int i=0;i<5;i++){
@@ -109,21 +124,5 @@ public class Activities {
                 return true;
         }
         return false;
-    }
-    
-    public void set(int i, int value){
-        this.activity_hours[i] = value;
-    }
-    
-    public int get(int i){
-        return this.activity_hours[i];
-    }
-    
-    public void decrease(int i){
-        this.activity_hours[i]--;
     }    
-    
-    public void increase(int i){
-        this.activity_hours[i]++;
-    }  
 }

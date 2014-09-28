@@ -38,10 +38,11 @@ public class Agent {
     private final Place workingPlace;
     private final Place homePlace;
     private final Activities activities;
-    private Place currentPlace;  
-    private Activity current_activity;
-    private List<Agent> friends;
+    
     private boolean isReserved;
+    private Place currentPlace; 
+    private List<Agent> friends; 
+    private Activity current_activity;
     private Activities currentActivityHours;
     
     public Agent(int age, Place workingPlace, Place homePlace, int activity_hours[], double leisureProb){
@@ -87,22 +88,21 @@ public class Agent {
         this.friends.add(a);
     }
     
-    private void goHome(){
-        this.currentPlace = this.homePlace;
-    }
-    
     public void clock(){
+        Activity old_activity = current_activity;
         if(currentActivityHours.hoursLeft()==true){
             Activity nextActivity = getNextActivity(this.current_activity);
             this.current_activity = nextActivity;
         }
         else
             reset();
+        if(this.current_activity!=old_activity)
+            performActivity(this.current_activity);
     }
     
     private void reset(){
-        this.goHome();
         this.isReserved = false;
+        this.currentPlace = this.homePlace;
         this.current_activity = Activity.SLEEPING;
         this.currentActivityHours = new Activities(activities.getActivityHours());
         boolean haveLeisure = makeLeisureDecision(this.leisureProb);
@@ -137,5 +137,36 @@ public class Agent {
         }
         return nextActivity;
     }
- 
+    
+    private void performActivity(Activity a){
+        switch(a){
+            case WORKING:   goWork();
+                break;
+            case COMMUTING: goCommute();
+                break;
+            case LEASURING: goLeasure();
+                break;
+            case RESTING:   goRest();  
+                break;
+            case SLEEPING:  break;
+        }
+    }
+    
+    private void goRest(){
+        this.currentPlace = this.homePlace;
+        System.out.println("JUST WENT HOME TO REST");
+    }    
+    
+    private void goWork(){
+        this.currentPlace = this.workingPlace;
+        System.out.println("JUST WENT TO WORK");
+    }
+    
+    private void goCommute(){
+        System.out.println("JUST WENT TO COMMUTE");
+    }
+    
+    private void goLeasure(){
+        System.out.println("JUST WENT TO LEASURE");
+    }    
 }

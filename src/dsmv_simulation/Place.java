@@ -28,12 +28,13 @@ package dsmv_simulation;
  * @author Christos Petropoulos, Paula Subías
  */
 public class Place {
-    private Area area;
-    private int building_code;
     
-    public Place(Area area, int building_code){
+    private Area area;
+    private int buildingCode;
+    
+    public Place(Area area, int bc){
         this.area = area;
-        this.building_code = building_code;
+        this.buildingCode = bc;
     }
     
     public Area getArea(){
@@ -41,7 +42,6 @@ public class Place {
     }
     
     public int getBuildingCode(){
-        return this.building_code;
+        return this.buildingCode;
     }
-    
 }
