@@ -28,12 +28,23 @@ package dsmv_simulation;
  * @author Christos Petropoulos, Paula Subías
  */
 public enum Area {
-    CENTRAL,
-    MONUMENTO,
-    BACLARAN,
-    MAPA,
-    ROOSEVELT,
-    BONI,
-    CUBAO,
-    KATIPUNAN
+    CENTRAL(0),
+    MONUMENTO(1),
+    BACLARAN(2),
+    MAPA(3),
+    ROOSEVELT(4),
+    BONI(5),
+    CUBAC(6),
+    KATIPUNAN(7);
+
+    private final int value;
+
+    private Area(final int newValue) {
+            value = newValue;
+    }
+    
+    public int getValue(){ 
+        return value; 
+    }    
+    
 }

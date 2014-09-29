@@ -27,27 +27,25 @@ package dsmv_simulation;
  *
  * @author Christos Petropoulos, Paula Subías
  */
-public class Simulation {
+ 
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        // TODO code application logic here
-        Place home = new Place(Area.MAPA,1);
-        Place work = new Place(Area.MONUMENTO,1);
-        Agent a = new Agent(20,home,work,new int[]{7,2,3,4,8},0.3);
-        Activity activity;
-        for(int i=0;i<120;i++){
-            activity = a.getCurrentActivity();
-            System.out.println(activity.getValue());
-            a.clock();
-            if((i+1)%24==0){
-                System.out.print("New date\n");
-            }
-        }
-        Route r= new Route(home,work);
-        
+public class Vertex implements Comparable<Vertex>{
+    
+    public final int id;
+    public Edge[] adjacencies;
+    public double minDistance = Double.POSITIVE_INFINITY;
+    public Vertex previous;
+    
+    public Vertex(int id){ 
+        this.id = id; 
+    }
+
+    @Override
+    public String toString() { return "" + this.id + ""; }
+    
+    @Override
+    public int compareTo(Vertex other){
+        return Double.compare(minDistance, other.minDistance);
     }
     
 }
