@@ -57,4 +57,8 @@ public class Place {
         this.area = place.getArea();
         this.buildingCode = place.getBuildingCode();
     }
+    
+    public boolean equals(Place p){
+        return this.area==p.getArea() && this.buildingCode==p.getBuildingCode();
+    }
 }

@@ -127,4 +127,9 @@ public class Activities {
         }
         return false;
     }    
+    
+    public void print(){
+        System.out.println("sleep:"+this.getSleepingHours()+" work:"+this.getWorkingHours()
+                            +" leisure:"+this.getLeisuringHours()+" rest:"+this.getRestingHours());
+    }
 }

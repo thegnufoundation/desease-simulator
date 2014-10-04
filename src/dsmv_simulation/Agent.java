@@ -38,6 +38,7 @@ public class Agent {
     private final Activities activities;
     private final int goWorkHours;
     private Place currentPlace; 
+    private Place leisurePlace;
     private Activity current_activity;
     private Activities currentActivityHours;
     
@@ -50,12 +51,15 @@ public class Agent {
         this.workingPlace = workingPlace;
         this.goWorkHours = Route.getPathDistance(homePlace.getArea(),workingPlace.getArea());
         workingHours = workingHours+goWorkHours;
+         
         int activity_hours[] = new int[]{workingHours,0,(24-workingHours-sleepingHours),sleepingHours};
+      
         this.activities = new Activities(activity_hours);
         this.currentActivityHours = new Activities(activity_hours);
         this.currentPlace = new Place(this.homePlace.getArea(),this.homePlace.getBuildingCode());
+        this.leisurePlace = new Place(null,0);
         this.reset();
-        System.out.println("distance:"+Route.getPathDistance(homePlace.getArea(),workingPlace.getArea()));
+        //System.out.println("distance:"+Route.getPathDistance(homePlace.getArea(),workingPlace.getArea()));
         
         
         
@@ -74,7 +78,7 @@ public class Agent {
         return this.homePlace;
     }        
     
-    public void setCurrentArea(Place p){
+    public void setCurrentPlace(Place p){
         this.currentPlace.set(p);
     }
     
@@ -91,28 +95,69 @@ public class Agent {
     }
  
     public void clock(){
-        Activity old_activity = current_activity;
+          
         if(currentActivityHours.hoursLeft()==true){
+            performActivity(this.current_activity);
             Activity nextActivity = getNextActivity(this.current_activity);
             this.current_activity = nextActivity;
         }
-        else
+        else{
+          
             reset();
-      
-        performActivity(this.current_activity);
+        }
+        //System.out.println(this.current_activity+":"+this.currentActivityHours.getSleepingHours());
+        
+         
+    }
+    
+    private Area chooseLeisureArea(){
+        int area_code = new Random().nextInt(7);
+        return Area.valueOf(area_code);
+    }
+    
+    private int getLeisureTime(Area leisureArea){
+        int leisureTime = 0;
+        leisureTime += Route.getPathDistance(workingPlace.getArea(), leisureArea);
+        //leisureTime += (24-activities.getWorkingHours()-activities.getSleepingHours()-leisureTime-activities.getRestingHours());
+        leisureTime += new Random().nextInt(3)+1;
+        return leisureTime;
+    }
+ 
+    
+    private int getRestHours(){
+        int hours = 24;
+        hours -= currentActivityHours.getSleepingHours();
+        hours -= currentActivityHours.getWorkingHours();
+        return hours;
+    }
+    
+    private int getRestingHours(){
+        int hours = 24;
+        hours -= currentActivityHours.getSleepingHours();
+        hours -= currentActivityHours.getWorkingHours();
+        hours -= currentActivityHours.getLeisuringHours();
+        return hours;
     }
     
     private void reset(){
-        this.setCurrentArea(this.homePlace);
+        this.setCurrentPlace(this.homePlace);
         this.current_activity = Activity.SLEEPING;
         this.currentActivityHours = new Activities(activities.getActivityHours());
         boolean haveLeisure = makeLeisureDecision(this.leisureProb);
-        if(!haveLeisure){
-            this.currentActivityHours.setLeisuringHours(0);
-            this.currentActivityHours.setRestingHours
-                                      (this.activities.getLeisuringHours()
-                                       + this.activities.getRestingHours());
+      
+        if(haveLeisure){
+            Area leisureArea = chooseLeisureArea();
+            this.leisurePlace.setArea(leisureArea);
+            //this.currentActivityHours.setRestingHours(Route.getPathDistance(workingPlace.getArea(), leisureArea));
+            this.currentActivityHours.setLeisuringHours(this.getLeisureTime(leisureArea));
+            this.currentActivityHours.setRestingHours(getRestingHours());
         }
+        else{
+            this.currentActivityHours.setLeisuringHours(0);
+            this.currentActivityHours.setRestingHours(getRestHours());
+        } 
+                 
+        this.currentActivityHours.print();
     }
     
     private boolean makeLeisureDecision(double threshold){
@@ -147,18 +192,30 @@ public class Agent {
                 break;
             case RESTING:   goRest();  
                 break;
-            case SLEEPING:  break;
+            case SLEEPING:  goSleep();
+                break;
+        }
+    }
+    
+    private void goSleep(){
+        if(this.currentPlace.getArea()!=this.homePlace.getArea()){
+            System.out.println("TRAVELING TO HOME FOR SLEEP");
+            travel(this.currentPlace,this.homePlace);
+        }
+        else{
+            this.setCurrentPlace(homePlace);
+            System.out.println("SLEEPING");
         }
     }
     
     private void travel(Place source, Place dest){
         Route route = new Route(source,dest);
         Area a;
-        System.out.println("I am in: "+source.getArea().getValue());
+        //System.out.println("I am in: "+source.getArea().getValue());
             a = route.getNextArea();
             this.currentPlace.setArea(a);
             this.currentPlace.setBuilding(-1);
-            System.out.println("I went to: "+a.getValue());
+            //System.out.println("I went to: "+a.getValue());
     }
     
     private void goRest(){
@@ -167,7 +224,7 @@ public class Agent {
             travel(this.currentPlace,this.homePlace);
         }
         else{
-            this.setCurrentArea(homePlace);
+            this.setCurrentPlace(homePlace);
             System.out.println("JUST WENT HOME TO REST");
         }
     }    
@@ -178,7 +235,7 @@ public class Agent {
             travel(this.currentPlace,this.workingPlace);
         }
         else{
-            this.setCurrentArea(workingPlace);
+            this.setCurrentPlace(workingPlace);
             System.out.println("JUST WENT TO WORK");
         }        
     }
@@ -188,13 +245,14 @@ public class Agent {
     }
     
     private void goLeasure(){
-        if(this.currentPlace.getArea()!=this.homePlace.getArea()){
+        
+        if(this.currentPlace.getArea()!=this.leisurePlace.getArea()){
             System.out.println("TRAVELING TO LEISURE");
-            travel(this.currentPlace,this.homePlace);
+            travel(this.currentPlace,this.leisurePlace);
         }
         else{
-            this.setCurrentArea(homePlace);
-            System.out.println("JUST WENT HOME TO REST");
+            this.setCurrentPlace(leisurePlace);
+            System.out.println("JUST WENT FOR LEISURE");
         }
     }    
     
