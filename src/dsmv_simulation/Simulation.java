@@ -36,7 +36,7 @@ public class Simulation {
         // TODO code application logic here
         Place home = new Place(Area.CENTRAL,1);
         Place work = new Place(Area.KATIPUNAN,1);
-        Agent a = new Agent(20,home,work,7,7,1);
+        Agent a = new Agent(home,work,7,7,0);
  
         for(int i=0;i<120;i++){
        

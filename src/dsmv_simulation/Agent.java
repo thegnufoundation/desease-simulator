@@ -31,39 +31,32 @@ import java.util.Random;
  */
 public class Agent {
     
-    private final int age;
     private final double leisureProb;
     private final Place workingPlace;
     private final Place homePlace;
     private final Activities activities;
-    private final int goWorkHours;
     private Place currentPlace; 
     private Place leisurePlace;
     private Activity current_activity;
     private Activities currentActivityHours;
     
-    public Agent(int age,Place homePlace,Place workingPlace, 
+    public Agent(Place homePlace,Place workingPlace, 
                  int workingHours, int sleepingHours, double leisureProb){
-         
-        this.age = age;
+        int activity_hours[] = getActivities(workingHours,sleepingHours,homePlace,workingPlace);
         this.homePlace = homePlace;
         this.leisureProb = leisureProb;
         this.workingPlace = workingPlace;
-        this.goWorkHours = Route.getPathDistance(homePlace.getArea(),workingPlace.getArea());
-        workingHours = workingHours+goWorkHours;
-         
-        int activity_hours[] = new int[]{workingHours,0,(24-workingHours-sleepingHours),sleepingHours};
-      
         this.activities = new Activities(activity_hours);
         this.currentActivityHours = new Activities(activity_hours);
-        this.currentPlace = new Place(this.homePlace.getArea(),this.homePlace.getBuildingCode());
+        this.currentPlace = new Place(homePlace);
         this.leisurePlace = new Place(null,0);
-        this.reset();
-        //System.out.println("distance:"+Route.getPathDistance(homePlace.getArea(),workingPlace.getArea()));
-        
-        
-        
-        
+        this.reset();  
+    }
+    
+    private int[] getActivities(int workingHours, int sleepingHours, Place homePlace, Place workingPlace){
+        int commutingHours = Route.getPathDistance(homePlace.getArea(),workingPlace.getArea());
+        workingHours += commutingHours;
+        return new int[]{workingHours,0,(24-workingHours-sleepingHours),sleepingHours};
     }
     
     public Activities getActivities(){
@@ -95,19 +88,13 @@ public class Agent {
     }
  
     public void clock(){
-          
         if(currentActivityHours.hoursLeft()==true){
             performActivity(this.current_activity);
             Activity nextActivity = getNextActivity(this.current_activity);
             this.current_activity = nextActivity;
         }
-        else{
-          
+        else
             reset();
-        }
-        //System.out.println(this.current_activity+":"+this.currentActivityHours.getSleepingHours());
-        
-         
     }
     
     private Area chooseLeisureArea(){
@@ -118,7 +105,6 @@ public class Agent {
     private int getLeisureTime(Area leisureArea){
         int leisureTime = 0;
         leisureTime += Route.getPathDistance(workingPlace.getArea(), leisureArea);
-        //leisureTime += (24-activities.getWorkingHours()-activities.getSleepingHours()-leisureTime-activities.getRestingHours());
         leisureTime += new Random().nextInt(3)+1;
         return leisureTime;
     }
