@@ -23,6 +23,8 @@
  */
 package dsmv_simulation;
 
+import java.util.Random;
+
 /**
  *
  * @author Christos Petropoulos, Paula Subías
@@ -55,4 +57,10 @@ public enum Area {
         }   
         throw new IllegalArgumentException("Invalid area id.");
     }    
+    
+    public static Area getRandom(){
+        int area_code = new Random().nextInt(7);
+        return Area.valueOf(area_code);
+    }
+    
 }

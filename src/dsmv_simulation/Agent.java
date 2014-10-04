@@ -42,7 +42,9 @@ public class Agent {
     
     public Agent(Place homePlace,Place workingPlace, 
                  int workingHours, int sleepingHours, double leisureProb){
-        int activity_hours[] = getActivities(workingHours,sleepingHours,homePlace,workingPlace);
+        
+        int activity_hours[] = getActivities(workingHours,sleepingHours,
+                                             homePlace,workingPlace);
         this.homePlace = homePlace;
         this.leisureProb = leisureProb;
         this.workingPlace = workingPlace;
@@ -53,10 +55,14 @@ public class Agent {
         this.reset();  
     }
     
-    private int[] getActivities(int workingHours, int sleepingHours, Place homePlace, Place workingPlace){
-        int commutingHours = Route.getPathDistance(homePlace.getArea(),workingPlace.getArea());
+    private int[] getActivities(int workingHours, int sleepingHours, 
+                                Place homePlace, Place workingPlace){
+        
+        int commutingHours = Route.getPathDistance(homePlace.getArea(),
+                                                   workingPlace.getArea());
         workingHours += commutingHours;
-        return new int[]{workingHours,0,(24-workingHours-sleepingHours),sleepingHours};
+        return new int[]{workingHours,0,
+                        (24-workingHours-sleepingHours),sleepingHours};
     }
     
     public Activities getActivities(){
@@ -97,11 +103,6 @@ public class Agent {
             reset();
     }
     
-    private Area chooseLeisureArea(){
-        int area_code = new Random().nextInt(7);
-        return Area.valueOf(area_code);
-    }
-    
     private int getLeisureTime(Area leisureArea){
         int leisureTime = 0;
         leisureTime += Route.getPathDistance(workingPlace.getArea(), leisureArea);
@@ -130,11 +131,9 @@ public class Agent {
         this.current_activity = Activity.SLEEPING;
         this.currentActivityHours = new Activities(activities.getActivityHours());
         boolean haveLeisure = makeLeisureDecision(this.leisureProb);
-      
         if(haveLeisure){
-            Area leisureArea = chooseLeisureArea();
+            Area leisureArea = Area.getRandom();
             this.leisurePlace.setArea(leisureArea);
-            //this.currentActivityHours.setRestingHours(Route.getPathDistance(workingPlace.getArea(), leisureArea));
             this.currentActivityHours.setLeisuringHours(this.getLeisureTime(leisureArea));
             this.currentActivityHours.setRestingHours(getRestingHours());
         }
@@ -142,8 +141,6 @@ public class Agent {
             this.currentActivityHours.setLeisuringHours(0);
             this.currentActivityHours.setRestingHours(getRestHours());
         } 
-                 
-        this.currentActivityHours.print();
     }
     
     private boolean makeLeisureDecision(double threshold){
@@ -196,12 +193,9 @@ public class Agent {
     
     private void travel(Place source, Place dest){
         Route route = new Route(source,dest);
-        Area a;
-        //System.out.println("I am in: "+source.getArea().getValue());
-            a = route.getNextArea();
-            this.currentPlace.setArea(a);
-            this.currentPlace.setBuilding(-1);
-            //System.out.println("I went to: "+a.getValue());
+        Area a = route.getNextArea();
+        this.currentPlace.setArea(a);
+        this.currentPlace.setBuilding(-1);
     }
     
     private void goRest(){
@@ -225,11 +219,7 @@ public class Agent {
             System.out.println("JUST WENT TO WORK");
         }        
     }
-    
-    private void goCommute(){
-        System.out.println("JUST WENT TO COMMUTE");
-    }
-    
+
     private void goLeasure(){
         
         if(this.currentPlace.getArea()!=this.leisurePlace.getArea()){
