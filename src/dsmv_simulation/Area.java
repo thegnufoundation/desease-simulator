@@ -47,4 +47,12 @@ public enum Area {
         return value; 
     }    
     
+    public static Area valueOf(int AreaNo) {
+        for (Area area : Area.values()) {
+            if (area.getValue() == AreaNo) 
+                return area;
+        }   
+        throw new IllegalArgumentException("Invalid area id.");
+    }    
+    
 }

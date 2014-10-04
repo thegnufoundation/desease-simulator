@@ -34,7 +34,7 @@ public class Simulation {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        Place home = new Place(Area.MAPA,1);
+        Place home = new Place(Area.KATIPUNAN,1);
         Place work = new Place(Area.MONUMENTO,1);
         Agent a = new Agent(20,home,work,new int[]{7,2,3,4,8},0.3);
         Activity activity;

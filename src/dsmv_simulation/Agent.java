@@ -23,8 +23,6 @@
  */
 package dsmv_simulation;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 /**
@@ -39,20 +37,18 @@ public class Agent {
     private final Place homePlace;
     private final Activities activities;
     
-    private boolean isReserved;
     private Place currentPlace; 
-    private List<Agent> friends; 
     private Activity current_activity;
     private Activities currentActivityHours;
     
-    public Agent(int age, Place workingPlace, Place homePlace, int activity_hours[], double leisureProb){
+    public Agent(int age,Place homePlace,Place workingPlace, int activity_hours[], double leisureProb){
         this.age = age;
         this.homePlace = homePlace;
-        this.workingPlace = workingPlace;
         this.leisureProb = leisureProb;
-        this.friends = new ArrayList<>();
+        this.workingPlace = workingPlace;
         this.activities = new Activities(activity_hours);
         this.currentActivityHours = new Activities(activity_hours);
+        this.currentPlace = new Place(this.homePlace.getArea(),this.homePlace.getBuildingCode());
         this.reset();
     }
     
@@ -69,7 +65,7 @@ public class Agent {
     }        
     
     public void setCurrentArea(Place p){
-        this.currentPlace = p;
+        this.currentPlace.set(p);
     }
     
     public Place getCurrentPlace(){
@@ -83,11 +79,7 @@ public class Agent {
     public void setCurrentActivity(Activity activity){
         this.current_activity = activity;
     }
-    
-    public void addFriend(Agent a){
-        this.friends.add(a);
-    }
-    
+ 
     public void clock(){
         Activity old_activity = current_activity;
         if(currentActivityHours.hoursLeft()==true){
@@ -101,8 +93,7 @@ public class Agent {
     }
     
     private void reset(){
-        this.isReserved = false;
-        this.currentPlace = this.homePlace;
+        this.setCurrentArea(this.homePlace);
         this.current_activity = Activity.SLEEPING;
         this.currentActivityHours = new Activities(activities.getActivityHours());
         boolean haveLeisure = makeLeisureDecision(this.leisureProb);
@@ -152,13 +143,27 @@ public class Agent {
         }
     }
     
+    private void travel(Place source, Place dest){
+        Route route = new Route(source,dest);
+        Area a;
+        System.out.println("I am in: "+source.getArea().getValue());
+        while(route.isFinished()==false){
+            a = route.getNextArea();
+            this.currentPlace.setArea(a);
+            this.currentPlace.setBuilding(-1);
+            System.out.println("I went to: "+a.getValue());
+        }
+    }
+    
     private void goRest(){
-        this.currentPlace = this.homePlace;
+        travel(this.currentPlace,this.homePlace);
+        this.setCurrentArea(homePlace);
         System.out.println("JUST WENT HOME TO REST");
     }    
     
     private void goWork(){
-        this.currentPlace = this.workingPlace;
+        travel(this.currentPlace,this.workingPlace);
+        this.setCurrentArea(workingPlace);
         System.out.println("JUST WENT TO WORK");
     }
     
@@ -169,4 +174,5 @@ public class Agent {
     private void goLeasure(){
         System.out.println("JUST WENT TO LEASURE");
     }    
+    
 }

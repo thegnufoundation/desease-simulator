@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.PriorityQueue;
-import java.util.Stack;
 
 /**
  *
@@ -36,17 +35,40 @@ import java.util.Stack;
 public class Route {
 
     private Vertex v[];    
-    private Place currentLocation;
+    private Area currentArea;
     private Place destination;
+    private List<Vertex> path;
+    private boolean finished;
     
     
-    public Route(Place currentLocation, Place destination){
-        this.currentLocation = currentLocation;
+    public Route(Place currentPlace, Place destination){
+        this.finished = false;
+        this.currentArea = currentPlace.getArea();
         this.destination = destination;
         initGraph();
-        setPath(currentLocation,destination);
+        setPath(currentArea,destination);
     }
  
+    public boolean isFinished(){
+        return this.finished;
+    }
+    
+    public Area getNextArea(){
+        Area nextArea = this.currentArea;
+        if(this.currentArea!=this.destination.getArea()){
+            for(int i=0;i<path.size();i++){
+                if(currentArea.getValue()==path.get(i).id){
+                    nextArea = Area.valueOf(path.get(i+1).id);
+                    break;
+                }
+            }
+        }
+        this.currentArea = nextArea;
+        if(this.currentArea==this.destination.getArea())
+            this.finished = true;
+        return nextArea;
+    }
+    
     private void initGraph(){
         this.v = new Vertex[8];
         for(int i=0;i<8;i++){
@@ -57,28 +79,29 @@ public class Route {
                                       new Edge(v[3], 2)};   
         
         v[1].adjacencies = new Edge[]{new Edge(v[0], 2),new Edge(v[4], 2)}; // From Monumento.                      
-        v[2].adjacencies = new Edge[]{new Edge(v[0], 2),new Edge(v[5], 1)}; // From Baclaran.                     
+        v[2].adjacencies = new Edge[]{new Edge(v[0], 2),new Edge(v[5], 2)}; // From Baclaran.                     
         v[3].adjacencies = new Edge[]{new Edge(v[0], 2),new Edge(v[6], 2)}; // From Mapa. 
         v[4].adjacencies = new Edge[]{new Edge(v[1], 2),new Edge(v[6], 2)}; // From Roosevelt.
         v[5].adjacencies = new Edge[]{new Edge(v[2], 2),new Edge(v[6], 2)}; // From Boni.
         
         v[6].adjacencies = new Edge[]{new Edge(v[3], 2),new Edge(v[4], 2),  // From Cubac.
-                                      new Edge(v[5], 1),new Edge(v[7], 2)};
+                                      new Edge(v[5], 2),new Edge(v[7], 2)};
         
         v[7].adjacencies = new Edge[]{new Edge(v[6], 2)};                   // From Katipunan.
     }
     
-    private void setPath(Place source, Place destination){
-        computeShortestPath(v[source.getArea().getValue()]);
+    private void setPath(Area source, Place destination){
+        computeShortestPath(v[source.getValue()]);
         for (int i=0;i<8;i++){
-	    List<Vertex> path = getShortestPathTo(v[i]);
-            if(path.get(path.size()-1)==v[destination.getArea().getValue()])
-                System.out.println("Path: " + path);
+	    this.path = getShortestPathTo(v[i]);
+            if(this.path.get(this.path.size()-1)==v[destination.getArea().getValue()]){
+                 
+                break;
+            }
 	}     
     }
     
-    private void computeShortestPath(Vertex source)
-    {
+    private void computeShortestPath(Vertex source){
         source.minDistance = 0.;
         PriorityQueue<Vertex> vertexQueue = new PriorityQueue<>();
       	vertexQueue.add(source);
@@ -86,9 +109,7 @@ public class Route {
 	while (!vertexQueue.isEmpty()) {
 	    Vertex u = vertexQueue.poll();
 
-            // Visit each edge exiting u
-            for (Edge e : u.adjacencies)
-            {
+            for (Edge e : u.adjacencies){
                 Vertex tv = e.target;
                 double weight = e.weight;
                 double distanceThroughU = u.minDistance + weight;
@@ -102,8 +123,7 @@ public class Route {
         }
     }
     
-    public static List<Vertex> getShortestPathTo(Vertex target)
-    {
+    public static List<Vertex> getShortestPathTo(Vertex target){
         List<Vertex> path = new ArrayList<>();
         for (Vertex vertex = target; vertex != null; vertex = vertex.previous)
             path.add(vertex);

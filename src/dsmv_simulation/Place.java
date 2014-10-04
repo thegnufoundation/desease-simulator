@@ -37,11 +37,24 @@ public class Place {
         this.buildingCode = bc;
     }
     
+    public void setArea(Area area){
+        this.area = area;
+    }
+    
+    public void setBuilding(int bc){
+        this.buildingCode = bc;
+    }
+    
     public Area getArea(){
         return this.area;
     }
     
     public int getBuildingCode(){
         return this.buildingCode;
+    }
+    
+    public void set(Place place){
+        this.area = place.getArea();
+        this.buildingCode = place.getBuildingCode();
     }
 }
