@@ -36,7 +36,4 @@ public class Edge {
         target = argTarget; 
         weight = argWeight; 
     }
-    
-    
-    
 }

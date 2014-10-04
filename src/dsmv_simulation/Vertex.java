@@ -27,14 +27,13 @@ package dsmv_simulation;
  *
  * @author Christos Petropoulos, Paula Subías
  */
- 
 
 public class Vertex implements Comparable<Vertex>{
     
     public final int id;
+    public Vertex previous;
     public Edge[] adjacencies;
     public double minDistance = Double.POSITIVE_INFINITY;
-    public Vertex previous;
     
     public Vertex(int id){ 
         this.id = id; 
@@ -47,5 +46,4 @@ public class Vertex implements Comparable<Vertex>{
     public int compareTo(Vertex other){
         return Double.compare(minDistance, other.minDistance);
     }
-    
 }

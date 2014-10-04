@@ -28,6 +28,7 @@ package dsmv_simulation;
  * @author Christos Petropoulos, Paula Subías
  */
 public enum Area {
+    
     CENTRAL(0),
     MONUMENTO(1),
     BACLARAN(2),
@@ -54,5 +55,4 @@ public enum Area {
         }   
         throw new IllegalArgumentException("Invalid area id.");
     }    
-    
 }

@@ -28,11 +28,11 @@ package dsmv_simulation;
  * @author Christos Petropoulos, Paula Subías
  */
 public enum Activity {
+    
     WORKING(0),
-    COMMUTING(1),
-    LEASURING(2),
-    RESTING(3),
-    SLEEPING(4);
+    LEASURING(1),
+    RESTING(2),
+    SLEEPING(3);
     
     private final int value;
 

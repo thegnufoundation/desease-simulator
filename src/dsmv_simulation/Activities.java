@@ -43,40 +43,40 @@ public class Activities {
         this.activity_hours[0] = hours;
     }
     
-    public void setCommutingHours(int hours){
+    //public void setCommutingHours(int hours){
+    //    this.activity_hours[1]  = hours;
+    //}
+    
+    public void setLeisuringHours(int hours){
         this.activity_hours[1]  = hours;
     }
     
-    public void setLeisuringHours(int hours){
-        this.activity_hours[2]  = hours;
-    }
-    
     public void setRestingHours(int hours){
-        this.activity_hours[3]  = hours;
+        this.activity_hours[2]  = hours;
     }
      
     public void setSleepingHours(int hours){
-        this.activity_hours[4]  = hours;
+        this.activity_hours[3]  = hours;
     }   
     
     public void decreaseWorkingHours(){
         this.activity_hours[0]--;
     }
     
-    public void decreaseCommutingTime(){
+    //public void decreaseCommutingTime(){
+    //    this.activity_hours[1]--;
+    //}
+    
+    public void decreaseLeisuringHours(){
         this.activity_hours[1]--;
     }
     
-    public void decreaseLeisuringHours(){
+    public void decreaseRestingHours(){
         this.activity_hours[2]--;
     }
     
-    public void decreaseRestingHours(){
-        this.activity_hours[3]--;
-    }
-    
     public void decreaseSleepingHours(){
-        this.activity_hours[4]--;
+        this.activity_hours[3]--;
     }
     
     public void set(int i, int value){
@@ -95,31 +95,33 @@ public class Activities {
         return this.activity_hours[0];
     }
     
-    public int getCommutingHours(){
+    //public int getCommutingHours(){
+    //    return this.activity_hours[1];
+    //}
+    
+    public int getLeisuringHours(){
         return this.activity_hours[1];
     }
     
-    public int getLeisuringHours(){
+    public int getRestingHours(){
         return this.activity_hours[2];
     }
     
-    public int getRestingHours(){
-        return this.activity_hours[3];
-    }
-    
     public int getSleepingHours(){
-        return this.activity_hours[4];
+        return this.activity_hours[3];
     }
     
     public int[] getActivityHours(){
         return this.activity_hours.clone();
     }
     public int get(int i){
+        if(i>=this.activity_hours.length)
+            throw new IllegalArgumentException("Invalid index for activity.");
         return this.activity_hours[i];
     }   
     
     public boolean hoursLeft(){
-        for(int i=0;i<5;i++){
+        for(int i=0;i<4;i++){
             if(this.activity_hours[i]>1)
                 return true;
         }

@@ -36,20 +36,30 @@ public class Agent {
     private final Place workingPlace;
     private final Place homePlace;
     private final Activities activities;
-    
+    private final int goWorkHours;
     private Place currentPlace; 
     private Activity current_activity;
     private Activities currentActivityHours;
     
-    public Agent(int age,Place homePlace,Place workingPlace, int activity_hours[], double leisureProb){
+    public Agent(int age,Place homePlace,Place workingPlace, 
+                 int workingHours, int sleepingHours, double leisureProb){
+         
         this.age = age;
         this.homePlace = homePlace;
         this.leisureProb = leisureProb;
         this.workingPlace = workingPlace;
+        this.goWorkHours = Route.getPathDistance(homePlace.getArea(),workingPlace.getArea());
+        workingHours = workingHours+goWorkHours;
+        int activity_hours[] = new int[]{workingHours,0,(24-workingHours-sleepingHours),sleepingHours};
         this.activities = new Activities(activity_hours);
         this.currentActivityHours = new Activities(activity_hours);
         this.currentPlace = new Place(this.homePlace.getArea(),this.homePlace.getBuildingCode());
         this.reset();
+        System.out.println("distance:"+Route.getPathDistance(homePlace.getArea(),workingPlace.getArea()));
+        
+        
+        
+        
     }
     
     public Activities getActivities(){
@@ -88,8 +98,8 @@ public class Agent {
         }
         else
             reset();
-        if(this.current_activity!=old_activity)
-            performActivity(this.current_activity);
+      
+        performActivity(this.current_activity);
     }
     
     private void reset(){
@@ -120,9 +130,9 @@ public class Agent {
     
     private Activity getNextInOrderActivity(Activity currentActivity){
         Activity nextActivity = currentActivity;
-        for(int i=1;i<=5;i++){
-            if(this.currentActivityHours.get((currentActivity.getValue()+i)%5)>0){
-                nextActivity = Activity.values()[(currentActivity.getValue()+i)%5];
+        for(int i=1;i<=4;i++){
+            if(this.currentActivityHours.get((currentActivity.getValue()+i)%4)>0){
+                nextActivity = Activity.values()[(currentActivity.getValue()+i)%4];
                 break;
             }     
         }
@@ -132,8 +142,6 @@ public class Agent {
     private void performActivity(Activity a){
         switch(a){
             case WORKING:   goWork();
-                break;
-            case COMMUTING: goCommute();
                 break;
             case LEASURING: goLeasure();
                 break;
@@ -147,24 +155,32 @@ public class Agent {
         Route route = new Route(source,dest);
         Area a;
         System.out.println("I am in: "+source.getArea().getValue());
-        while(route.isFinished()==false){
             a = route.getNextArea();
             this.currentPlace.setArea(a);
             this.currentPlace.setBuilding(-1);
             System.out.println("I went to: "+a.getValue());
-        }
     }
     
     private void goRest(){
-        travel(this.currentPlace,this.homePlace);
-        this.setCurrentArea(homePlace);
-        System.out.println("JUST WENT HOME TO REST");
+        if(this.currentPlace.getArea()!=this.homePlace.getArea()){
+            System.out.println("TRAVELING TO HOME");
+            travel(this.currentPlace,this.homePlace);
+        }
+        else{
+            this.setCurrentArea(homePlace);
+            System.out.println("JUST WENT HOME TO REST");
+        }
     }    
     
     private void goWork(){
-        travel(this.currentPlace,this.workingPlace);
-        this.setCurrentArea(workingPlace);
-        System.out.println("JUST WENT TO WORK");
+        if(this.currentPlace.getArea()!=this.workingPlace.getArea()){
+            System.out.println("TRAVELING TO WORK");
+            travel(this.currentPlace,this.workingPlace);
+        }
+        else{
+            this.setCurrentArea(workingPlace);
+            System.out.println("JUST WENT TO WORK");
+        }        
     }
     
     private void goCommute(){
@@ -172,7 +188,14 @@ public class Agent {
     }
     
     private void goLeasure(){
-        System.out.println("JUST WENT TO LEASURE");
+        if(this.currentPlace.getArea()!=this.homePlace.getArea()){
+            System.out.println("TRAVELING TO LEISURE");
+            travel(this.currentPlace,this.homePlace);
+        }
+        else{
+            this.setCurrentArea(homePlace);
+            System.out.println("JUST WENT HOME TO REST");
+        }
     }    
     
 }

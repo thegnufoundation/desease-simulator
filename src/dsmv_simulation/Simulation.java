@@ -34,13 +34,13 @@ public class Simulation {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        Place home = new Place(Area.KATIPUNAN,1);
-        Place work = new Place(Area.MONUMENTO,1);
-        Agent a = new Agent(20,home,work,new int[]{7,2,3,4,8},0.3);
+        Place home = new Place(Area.CENTRAL,1);
+        Place work = new Place(Area.KATIPUNAN,1);
+        Agent a = new Agent(20,home,work,7,7,0.3);
         Activity activity;
         for(int i=0;i<120;i++){
             activity = a.getCurrentActivity();
-            System.out.println(activity.getValue());
+            
             a.clock();
             if((i+1)%24==0){
                 System.out.print("New date\n");

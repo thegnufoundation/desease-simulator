@@ -40,13 +40,12 @@ public class Route {
     private List<Vertex> path;
     private boolean finished;
     
-    
     public Route(Place currentPlace, Place destination){
+        this.v = getGraph();
         this.finished = false;
         this.currentArea = currentPlace.getArea();
         this.destination = destination;
-        initGraph();
-        setPath(currentArea,destination);
+        this.setPath(currentArea,destination);
     }
  
     public boolean isFinished(){
@@ -69,14 +68,14 @@ public class Route {
         return nextArea;
     }
     
-    private void initGraph(){
-        this.v = new Vertex[8];
+    public static Vertex[] getGraph(){
+        Vertex v[] = new Vertex[8];
         for(int i=0;i<8;i++){
-            this.v[i] = new Vertex(i);
+            v[i] = new Vertex(i);
         }        
         
 	v[0].adjacencies = new Edge[]{new Edge(v[1], 2),new Edge(v[2], 2),  // From Central.
-                                      new Edge(v[3], 2)};   
+                                           new Edge(v[3], 2)};   
         
         v[1].adjacencies = new Edge[]{new Edge(v[0], 2),new Edge(v[4], 2)}; // From Monumento.                      
         v[2].adjacencies = new Edge[]{new Edge(v[0], 2),new Edge(v[5], 2)}; // From Baclaran.                     
@@ -85,30 +84,27 @@ public class Route {
         v[5].adjacencies = new Edge[]{new Edge(v[2], 2),new Edge(v[6], 2)}; // From Boni.
         
         v[6].adjacencies = new Edge[]{new Edge(v[3], 2),new Edge(v[4], 2),  // From Cubac.
-                                      new Edge(v[5], 2),new Edge(v[7], 2)};
+                                           new Edge(v[5], 2),new Edge(v[7], 2)};
         
         v[7].adjacencies = new Edge[]{new Edge(v[6], 2)};                   // From Katipunan.
+        return v;
     }
     
     private void setPath(Area source, Place destination){
         computeShortestPath(v[source.getValue()]);
         for (int i=0;i<8;i++){
 	    this.path = getShortestPathTo(v[i]);
-            if(this.path.get(this.path.size()-1)==v[destination.getArea().getValue()]){
-                 
+            if(this.path.get(this.path.size()-1)==v[destination.getArea().getValue()])
                 break;
-            }
 	}     
     }
     
-    private void computeShortestPath(Vertex source){
+    public static void computeShortestPath(Vertex source){
         source.minDistance = 0.;
         PriorityQueue<Vertex> vertexQueue = new PriorityQueue<>();
       	vertexQueue.add(source);
-
 	while (!vertexQueue.isEmpty()) {
 	    Vertex u = vertexQueue.poll();
-
             for (Edge e : u.adjacencies){
                 Vertex tv = e.target;
                 double weight = e.weight;
@@ -129,6 +125,19 @@ public class Route {
             path.add(vertex);
         Collections.reverse(path);
         return path;
-    }    
+    }      
     
+    public static int getPathDistance(Area source, Area dest){
+        Vertex vg[] = getGraph();
+        List<Vertex>vertex = null;
+        computeShortestPath(vg[source.getValue()]);
+        for (int i=0;i<8;i++){
+	    vertex = getShortestPathTo(vg[i]);
+            if(vertex.get(vertex.size()-1)==vg[dest.getValue()])
+                break;
+	}    
+        if(vertex!=null)
+            return vertex.size()-1;
+        return 0;
+    }
 }
