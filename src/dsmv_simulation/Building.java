@@ -23,6 +23,7 @@
  */
 package dsmv_simulation;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -38,6 +39,7 @@ public class Building {
     public Building(int capacity,Place buildingPlace){
         this.capacity = capacity;
         this.buildingPlace = new Place(buildingPlace);
+        this.agentsInside =  new ArrayList<>();
     }
     
     public void addAgent(Agent a){
@@ -46,6 +48,10 @@ public class Building {
     
     public void removeAgent(Agent a){
         this.agentsInside.remove(a);
+    }
+    
+    public void removeAllAgents(){
+        this.agentsInside.clear();
     }
     
     public double getDensity(){
@@ -74,12 +80,21 @@ public class Building {
         return total_infected;
     }
     
-    public int getInfectionRate(){
-        return (int)((this.getInfectedPercentage()/this.getDensity())*this.agentsInside.size());
+    public float getInfectionRate(){
+        float rate;
+        rate = this.agentsInside.size()/this.capacity;
+        rate = rate * this.countInfected()/this.agentsInside.size();
+        return rate;
     }
     
-    public void clock(Infection infection){
-        int totalNewInfected = getInfectionRate();
+    public void clock(Agent[] agents,Infection infection){
+        for(Agent a : agents){
+            if(a.getCurrentPlace().equals(this.buildingPlace))
+                agentsInside.add(a);
+        }
+        
+        int totalNewInfected = (int)(agentsInside.size()*getInfectionRate());
+        
         for(Agent a : agentsInside){
             if(totalNewInfected>0){
                 if(a.getHealthStatus()==HealthStatus.SUSPECTIBLE){
@@ -90,6 +105,7 @@ public class Building {
             else
                 break;
         }  
+ 
+        this.removeAllAgents();
     }
-    
 }
