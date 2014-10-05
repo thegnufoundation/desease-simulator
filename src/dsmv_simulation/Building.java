@@ -24,6 +24,7 @@
 package dsmv_simulation;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -34,28 +35,33 @@ public class Building {
     
     private final int capacity;
     private final Place buildingPlace;
-    private List<Agent> agentsInside;
-    
+    private List<Agent> agents;
+    public int availability;
+
     public Building(int capacity,Place buildingPlace){
         this.capacity = capacity;
+        this.availability = capacity;
         this.buildingPlace = new Place(buildingPlace);
-        this.agentsInside =  new ArrayList<>();
+        this.agents =  new ArrayList<>();
     }
     
     public void addAgent(Agent a){
-        this.agentsInside.add(a);
+        this.agents.add(a);
+        availability = this.agents.size();
     }
     
     public void removeAgent(Agent a){
-        this.agentsInside.remove(a);
+        this.agents.remove(a);
+        availability = this.agents.size();
     }
     
     public void removeAllAgents(){
-        this.agentsInside.clear();
+        this.agents.clear();
+        availability = this.agents.size();
     }
     
     public double getDensity(){
-        return this.agentsInside.size()/this.capacity;
+        return this.countAgentsInside()/this.capacity;
     }
     
     public Area getBuildingArea(){
@@ -66,15 +72,19 @@ public class Building {
         return this.buildingPlace.getBuildingCode();
     }
     
+    public Place getPlace(){
+        return this.buildingPlace;
+    }
+    
     public double getInfectedPercentage(){
         int total_infected = this.countInfected();
-        return total_infected/this.agentsInside.size();
+        return total_infected/this.agents.size();
     }
     
     public int countInfected(){
         int total_infected = 0;
-        for(Agent a : agentsInside){
-            if(a.getHealthStatus()==HealthStatus.INFECTIOUS)
+        for(Agent a : agents){
+            if(isAgentInside(a) && a.getHealthStatus()==HealthStatus.INFECTIOUS)
                 total_infected++;
         }
         return total_infected;
@@ -82,22 +92,29 @@ public class Building {
     
     public float getInfectionRate(){
         float rate;
-        rate = this.agentsInside.size()/this.capacity;
-        rate = rate * this.countInfected()/this.agentsInside.size();
+        rate = this.countAgentsInside()/this.capacity;
+        rate = rate * this.countInfected()/this.countAgentsInside();
         return rate;
     }
     
-    public void clock(Agent[] agents,Infection infection){
-        for(Agent a : agents){
+    private boolean isAgentInside(Agent a){
+        return a.getCurrentPlace().equals(this.buildingPlace);
+    }
+    
+    private int countAgentsInside(){
+        int count = 0;
+        for(Agent a : this.agents){
             if(a.getCurrentPlace().equals(this.buildingPlace))
-                agentsInside.add(a);
+                count++;
         }
-        
-        int totalNewInfected = (int)(agentsInside.size()*getInfectionRate());
-        
-        for(Agent a : agentsInside){
+        return count;
+    }
+    
+    public void clock(Infection infection){
+        int totalNewInfected = (int)(countAgentsInside()*getInfectionRate());
+        for (Agent a : agents) {
             if(totalNewInfected>0){
-                if(a.getHealthStatus()==HealthStatus.SUSPECTIBLE){
+                if(isAgentInside(a) && a.getHealthStatus()==HealthStatus.SUSPECTIBLE){
                     a.Infect(infection);
                     totalNewInfected--;
                 }
@@ -105,7 +122,5 @@ public class Building {
             else
                 break;
         }  
- 
-        this.removeAllAgents();
     }
 }

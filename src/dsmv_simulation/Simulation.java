@@ -33,20 +33,21 @@ public class Simulation {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
-        Place home = new Place(Area.CENTRAL,1);
-        Place work = new Place(Area.KATIPUNAN,1);
-        Agent a = new Agent(home,work,7,7,1);
-        Infection infection = new Infection(1,1);
-        a.Infect(infection);
-        for(int i=0;i<120;i++){
-       
-            a.clock();
-            if((i+1)%24==0){
-                System.out.print("New date\n");
+         
+        int days = 120;
+        int currentHours = 0;
+        int totalHours = days*24;
+        Infection infection = new Infection(4,4);
+        City city = new City(1000,10,infection);
+    
+        while(currentHours<totalHours){
+            city.clock();
+            currentHours++;
+            if(currentHours%24==0){
+                int[] SEIR = city.getSEIR();
+                System.out.println(SEIR[0]+" "+SEIR[1]+" "+SEIR[2]+" "+SEIR[3]);
             }
         }
-     
     }
     
 }
