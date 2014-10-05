@@ -37,7 +37,7 @@ public class Simulation {
         Place home = new Place(Area.CENTRAL,1);
         Place work = new Place(Area.KATIPUNAN,1);
         Agent a = new Agent(home,work,7,7,1);
-        Infection infection = new Infection(5,5);
+        Infection infection = new Infection(1,1);
         a.Infect(infection);
         for(int i=0;i<120;i++){
        

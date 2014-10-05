@@ -62,7 +62,7 @@ public class Agent {
     public void Infect(Infection infection){
         this.infection = new Infection(infection);
     }
-    
+
     public HealthStatus getHealthStatus(){
         return this.healthStatus;
     }
@@ -96,6 +96,11 @@ public class Agent {
     }
  
     public void clock(){
+        if(this.infection!=null){
+            this.healthStatus = this.infection.getInfectionStatus();
+            this.infection.clock();
+        }
+        
         if(currentActivityHours.hoursLeft()==true){
             performActivity(this.current_activity);
             Activity nextActivity = getNextActivity(this.current_activity);
@@ -103,11 +108,6 @@ public class Agent {
         }
         else
             reset();
-        
-        if(this.infection!=null){
-            this.healthStatus = this.infection.getInfectionStatus();
-            this.infection.clock();
-        }
     }
 
     private int[] getActivities(int workingHours, int sleepingHours, 
@@ -207,6 +207,13 @@ public class Agent {
         }
     }
     
+    private void travel(Place source, Place dest){
+        Route route = new Route(source,dest);
+        Area a = route.getNextArea();
+        this.currentPlace.setArea(a);
+        this.currentPlace.setBuilding(-1);
+    }
+    
     private void goSleep(){
         if(this.currentPlace.getArea()!=this.homePlace.getArea()){
             System.out.println("TRAVELING TO HOME FOR SLEEP "+this.healthStatus);
@@ -216,14 +223,7 @@ public class Agent {
             this.setCurrentPlace(homePlace);
             System.out.println("SLEEPING "+this.healthStatus);
         }
-    }
-    
-    private void travel(Place source, Place dest){
-        Route route = new Route(source,dest);
-        Area a = route.getNextArea();
-        this.currentPlace.setArea(a);
-        this.currentPlace.setBuilding(-1);
-    }
+    }    
     
     private void goRest(){
         if(this.currentPlace.getArea()!=this.homePlace.getArea()){

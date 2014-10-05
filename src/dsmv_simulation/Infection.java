@@ -33,8 +33,8 @@ public class Infection {
     private int infectedPeriod;
     
     public Infection(int exposedPeriod, int infectedPeriod){
-        this.exposedPeriod = exposedPeriod;
-        this.infectedPeriod = infectedPeriod;
+        this.exposedPeriod = exposedPeriod*24;
+        this.infectedPeriod = infectedPeriod*24;
     }
     
     public Infection(Infection infection){
@@ -64,6 +64,5 @@ public class Infection {
     
     private int getInfectedPeriod(){
         return this.infectedPeriod;
-    }
-    
+    } 
 }
