@@ -34,20 +34,31 @@ public class Simulation {
      */
     public static void main(String[] args) {
          
-        int days = 120;
+        int SEIR[];
+        int days = Integer.parseInt(args[0]);
         int currentHours = 0;
         int totalHours = days*24;
+        int population = Integer.parseInt(args[1]);;
+        int infected = Integer.parseInt(args[2]);;
+        
+        
         Infection infection = new Infection(4,4);
-        City city = new City(1000,10,infection);
+        
+        System.err.println("Starting simulation for a period of ("+days+") days.");
+        System.err.println("Parameters = {population="+population+ ", infected="+infected +"}");
+        
+        City city = new City(population,infected,infection);
     
+  
         while(currentHours<totalHours){
             city.clock();
             currentHours++;
-            if(currentHours%24==0){
-                int[] SEIR = city.getSEIR();
-                System.out.println(SEIR[0]+" "+SEIR[1]+" "+SEIR[2]+" "+SEIR[3]);
-            }
+            SEIR = city.getSEIR();
+            System.out.println(SEIR[0]+" "+SEIR[1]+" "+SEIR[2]+" "+SEIR[3]);
+            System.err.print("Simulation in process...("+100*currentHours/totalHours+"%)\r");
         }
+        System.err.print("Simulation in process...(DONE)\r\n");
+        System.err.println("[Simulation completed]");
     }
     
 }

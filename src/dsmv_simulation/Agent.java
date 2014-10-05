@@ -126,7 +126,10 @@ public class Agent {
         int leisureTime = 0;
         int mlt = getMaxLeisureTime(leisureArea);
         leisureTime += Route.getPathDistance(workingPlace.getArea(), leisureArea);
-        leisureTime += new Random().nextInt(mlt)+1;
+        if(mlt>0)
+            leisureTime += new Random().nextInt(mlt)+1;
+        else
+            leisureTime++;
         return leisureTime;
     }
  
