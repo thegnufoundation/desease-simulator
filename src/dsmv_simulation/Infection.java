@@ -27,26 +27,43 @@ package dsmv_simulation;
  *
  * @author Christos Petropoulos, Paula Subías
  */
-public class Simulation {
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        // TODO code application logic here
-        Place home = new Place(Area.CENTRAL,1);
-        Place work = new Place(Area.KATIPUNAN,1);
-        Agent a = new Agent(home,work,7,7,1);
-        Infection infection = new Infection(5,5);
-        a.Infect(infection);
-        for(int i=0;i<120;i++){
-       
-            a.clock();
-            if((i+1)%24==0){
-                System.out.print("New date\n");
-            }
-        }
-     
+public class Infection {
+    
+    private int exposedPeriod;
+    private int infectedPeriod;
+    
+    public Infection(int exposedPeriod, int infectedPeriod){
+        this.exposedPeriod = exposedPeriod;
+        this.infectedPeriod = infectedPeriod;
+    }
+    
+    public Infection(Infection infection){
+        this.exposedPeriod = infection.getExposedPeriod();
+        this.infectedPeriod = infection.getInfectedPeriod();
+    }
+    
+    public void clock(){
+        if(exposedPeriod>0)
+            exposedPeriod--;
+        else if(infectedPeriod>0)
+            infectedPeriod--;
+    }    
+    
+    public HealthStatus getInfectionStatus(){
+        if(exposedPeriod>0)
+            return HealthStatus.EXPOSED;
+        else if(infectedPeriod>0)
+            return HealthStatus.INFECTIOUS;
+        else
+            return HealthStatus.RECOVERED;
+    }
+    
+    private int getExposedPeriod(){
+        return this.exposedPeriod;
+    }
+    
+    private int getInfectedPeriod(){
+        return this.infectedPeriod;
     }
     
 }

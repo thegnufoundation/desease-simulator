@@ -27,26 +27,28 @@ package dsmv_simulation;
  *
  * @author Christos Petropoulos, Paula Subías
  */
-public class Simulation {
+public enum HealthStatus {
+    
+    SUSPECTIBLE(0),
+    EXPOSED(1),
+    INFECTIOUS(2),
+    RECOVERED(3);
+    
+    private final int value;
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        // TODO code application logic here
-        Place home = new Place(Area.CENTRAL,1);
-        Place work = new Place(Area.KATIPUNAN,1);
-        Agent a = new Agent(home,work,7,7,1);
-        Infection infection = new Infection(5,5);
-        a.Infect(infection);
-        for(int i=0;i<120;i++){
-       
-            a.clock();
-            if((i+1)%24==0){
-                System.out.print("New date\n");
-            }
-        }
-     
+    private HealthStatus(final int newValue) {
+            value = newValue;
     }
     
+    public int getValue(){ 
+        return value; 
+    }    
+    
+    public static HealthStatus valueOf(int healthSID) {
+        for (HealthStatus hstatus : HealthStatus.values()) {
+            if (hstatus.getValue() == healthSID) 
+                return hstatus;
+        }   
+        throw new IllegalArgumentException("Invalid health status id.");
+    }    
 }
