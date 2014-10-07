@@ -62,7 +62,11 @@ public class Agent {
     }
  
     public void Infect(Infection infection){
-        this.infection = new Infection(infection);
+        int inf = infection.getInfectedPeriod()/24;
+        inf = (int)(inf + (new Random().nextGaussian())*2);
+        int exp = infection.getExposedPeriod()/24;
+        exp = (int)(exp + (new Random().nextGaussian())*2);        
+        this.infection = new Infection(exp,inf);
     }
 
     public HealthStatus getHealthStatus(){

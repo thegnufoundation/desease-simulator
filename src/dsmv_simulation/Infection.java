@@ -28,7 +28,6 @@ package dsmv_simulation;
  * @author Christos Petropoulos, Paula Subías
  */
 public class Infection {
-    
     private int exposedPeriod;
     private int infectedPeriod;
     
@@ -58,11 +57,11 @@ public class Infection {
             return HealthStatus.RECOVERED;
     }
     
-    private int getExposedPeriod(){
+    public int getExposedPeriod(){
         return this.exposedPeriod;
     }
     
-    private int getInfectedPeriod(){
+    public int getInfectedPeriod(){
         return this.infectedPeriod;
     } 
 }

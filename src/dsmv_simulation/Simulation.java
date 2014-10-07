@@ -38,11 +38,12 @@ public class Simulation {
         int days = Integer.parseInt(args[0]);
         int currentHours = 0;
         int totalHours = days*24;
-        int population = Integer.parseInt(args[1]);;
-        int infected = Integer.parseInt(args[2]);;
+        int population = Integer.parseInt(args[1]);
+        int infected = Integer.parseInt(args[2]);
         
+        // if arguments not given, print message to give arguments 
         
-        Infection infection = new Infection(4,4);
+        Infection infection = new Infection(3,15);
         
         System.err.println("Starting simulation for a period of ("+days+") days.");
         System.err.println("Parameters = {population="+population+ ", infected="+infected +"}");

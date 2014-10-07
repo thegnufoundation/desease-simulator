@@ -4,14 +4,12 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/Users/chris/Github/desease-simulator/src/dsmv_simulation/Agent.java</file>
-            <file>file:/Users/chris/Github/desease-simulator/src/dsmv_simulation/Activity.java</file>
+            <file>file:/Users/chris/Github/desease-simulator/src/dsmv_simulation/City.java</file>
+            <file>file:/Users/chris/Github/desease-simulator/src/dsmv_simulation/Building.java</file>
+            <file>file:/Users/chris/Github/desease-simulator/src/dsmv_simulation/Infection.java</file>
             <file>file:/Users/chris/Github/desease-simulator/src/dsmv_simulation/Vertex.java</file>
-            <file>file:/Users/chris/Github/desease-simulator/src/dsmv_simulation/Activities.java</file>
             <file>file:/Users/chris/Github/desease-simulator/src/dsmv_simulation/Place.java</file>
-            <file>file:/Users/chris/Github/desease-simulator/src/dsmv_simulation/Edge.java</file>
-            <file>file:/Users/chris/Github/desease-simulator/src/dsmv_simulation/Area.java</file>
             <file>file:/Users/chris/Github/desease-simulator/src/dsmv_simulation/Simulation.java</file>
-            <file>file:/Users/chris/Github/desease-simulator/src/dsmv_simulation/Route.java</file>
         </group>
     </open-files>
 </project-private>

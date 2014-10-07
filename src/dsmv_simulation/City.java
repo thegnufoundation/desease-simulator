@@ -39,7 +39,7 @@ public class City {
     private Infection infection;
     private Agent[] agents;
     
-    public City(int population,int infected,Infection infection){
+    public City(int population,int infected,Infection infection) {
         System.err.print("Initializing...(0%)\r");
         this.infection = new Infection(infection);
         this.setLeisureBuildings(10);
@@ -56,16 +56,19 @@ public class City {
         System.err.print("Initializing...(DONE)\r\n");
     }
     
-    private void setAgents(int n){
+    private void setAgents(int n)  {
         this.agents = new Agent[n];
         for(int i=0;i<n;i++){
             this.agents[i] = generateAgent();
         }
     }
     
-    private Agent generateAgent(){
-        int workingHours = new Random().nextInt(8);
-        int sleepingHours = new Random().nextInt(8);
+    private Agent generateAgent() {
+        
+        int pos = (int)( 5 + (new Random().nextGaussian()) * 3);
+        int workingHours = pos;
+       pos = (int)( 5 + (new Random().nextGaussian()) * 3);
+        int sleepingHours = pos;
         int homeBuildingID = this.currentHomeID;
         int workBuildingID = getBuildingMax();
         double leisureProb = new Random().nextDouble();
