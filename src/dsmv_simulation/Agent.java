@@ -63,9 +63,9 @@ public class Agent {
  
     public void Infect(Infection infection){
         int inf = infection.getInfectedPeriod()/24;
-        inf = (int)(inf + (new Random().nextGaussian())*2);
+        inf = (int)(inf + (new Random().nextGaussian()));
         int exp = infection.getExposedPeriod()/24;
-        exp = (int)(exp + (new Random().nextGaussian())*2);        
+        exp = (int)(exp + (new Random().nextGaussian())*3);        
         this.infection = new Infection(exp,inf);
     }
 

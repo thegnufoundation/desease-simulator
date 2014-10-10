@@ -26,6 +26,7 @@ package dsmv_simulation;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 /**
  *
@@ -93,6 +94,8 @@ public class Building {
     public float getInfectionRate(){
         float rate;
         rate = this.countAgentsInside()/this.capacity;
+        if(this.countAgentsInside()==0)
+            return 0;
         rate = rate * this.countInfected()/this.countAgentsInside();
         return rate;
     }
@@ -114,7 +117,7 @@ public class Building {
         int totalNewInfected = (int)(countAgentsInside()*getInfectionRate());
         for (Agent a : agents) {
             if(totalNewInfected>0){
-                if(isAgentInside(a) && a.getHealthStatus()==HealthStatus.SUSPECTIBLE){
+                if(isAgentInside(a) && a.getHealthStatus()==HealthStatus.SUSPECTIBLE && new Random().nextDouble()<0.05){
                     a.Infect(infection);
                     totalNewInfected--;
                 }

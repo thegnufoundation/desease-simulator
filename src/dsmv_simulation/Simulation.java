@@ -43,7 +43,7 @@ public class Simulation {
         
         // if arguments not given, print message to give arguments 
         
-        Infection infection = new Infection(3,15);
+        Infection infection = new Infection(2,10);
         
         System.err.println("Starting simulation for a period of ("+days+") days.");
         System.err.println("Parameters = {population="+population+ ", infected="+infected +"}");

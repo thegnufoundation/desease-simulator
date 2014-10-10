@@ -34,6 +34,7 @@ public class City {
     private Building[] leisureBuildings;
     private Building[] workBuildings;
     private Building[] homeBuildings;
+    private Building[] publicPlaces;
     private int currentBuildingID = 0;
     private int currentHomeID = 0;
     private Infection infection;
@@ -53,7 +54,19 @@ public class City {
         for(int i=0;i<infected;i++){
             agents[i].Infect(infection);
         }
+        generatePublicAreas();
         System.err.print("Initializing...(DONE)\r\n");
+    }
+    
+    private void generatePublicAreas(){
+        int j;
+        this.publicPlaces = new Building[Area.values().length];
+        for(int i=0;i<Area.values().length;i++){
+            this.publicPlaces[i] = new Building(100,new Place(Area.valueOf(i),-1));
+            for(j=0;j<this.agents.length;j++){
+                this.publicPlaces[i].addAgent(agents[j]);
+            }
+        }
     }
     
     private void setAgents(int n)  {
@@ -131,7 +144,11 @@ public class City {
         }
         for(i=0;i<this.homeBuildings.length;i++){
             this.homeBuildings[i].clock(this.infection);
-        }         
+        }     
+        for(i=0;i<this.publicPlaces.length;i++){
+            this.publicPlaces[i].clock(this.infection);
+        }
+        
         for(i=0;i<this.agents.length;i++){
             this.agents[i].clock();
         }   
