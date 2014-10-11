@@ -46,17 +46,17 @@ public class Building {
     
     public void addAgent(Agent a){
         this.agents.add(a);
-        availability = this.agents.size();
+        availability--;
     }
     
     public void removeAgent(Agent a){
         this.agents.remove(a);
-        availability = this.agents.size();
+        availability++;
     }
     
     public void removeAllAgents(){
         this.agents.clear();
-        availability = this.agents.size();
+        availability = capacity;
     }
     
     public double getDensity(){

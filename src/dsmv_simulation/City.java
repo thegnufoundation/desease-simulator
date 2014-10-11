@@ -43,7 +43,7 @@ public class City {
     public City(int population,int infected,Infection infection) {
         this.infection = infection;
         this.setLeisureBuildings(10);
-        this.setWorkBuildings((int)(population/30));
+        this.setWorkBuildings(20);
         this.setHomeBuildings((int)(population/2));
         this.setAgents(population);
         for(int i=0;i<infected;i++){
@@ -54,9 +54,10 @@ public class City {
     
     private void setPublicAreas(){
         int j;
+        int population = this.agents.length;
         this.publicPlaces = new Building[Area.values().length];
         for(int i=0;i<Area.values().length;i++){
-            this.publicPlaces[i] = new Building(100,new Place(Area.valueOf(i),-1));
+            this.publicPlaces[i] = new Building(population/25,new Place(Area.valueOf(i),-1));
             for(j=0;j<this.agents.length;j++){
                 this.publicPlaces[i].addAgent(agents[j]);
             }
@@ -98,6 +99,8 @@ public class City {
                 max_id = i;
             }
         } 
+        if(max_id==-1)
+            max_id = new Random().nextInt(this.workBuildings.length);
         return max_id;
     }
     
