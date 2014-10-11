@@ -41,24 +41,18 @@ public class City {
     private Agent[] agents;
     
     public City(int population,int infected,Infection infection) {
-        System.err.print("Initializing...(0%)\r");
-        this.infection = new Infection(infection);
+        this.infection = infection;
         this.setLeisureBuildings(10);
-        System.err.print("Initializing...(20%)\r");
         this.setWorkBuildings((int)(population/30));
-        System.err.print("Initializing...(40%)\r");
         this.setHomeBuildings((int)(population/2));
-        System.err.print("Initializing...(60%)\r");
         this.setAgents(population);
-        System.err.print("Initializing...(80%)\r");
         for(int i=0;i<infected;i++){
             agents[i].Infect(infection);
         }
-        generatePublicAreas();
-        System.err.print("Initializing...(DONE)\r\n");
+        setPublicAreas();
     }
     
-    private void generatePublicAreas(){
+    private void setPublicAreas(){
         int j;
         this.publicPlaces = new Building[Area.values().length];
         for(int i=0;i<Area.values().length;i++){

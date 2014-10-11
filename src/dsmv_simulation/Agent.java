@@ -62,11 +62,7 @@ public class Agent {
     }
  
     public void Infect(Infection infection){
-        int inf = infection.getInfectedPeriod()/24;
-        inf = (int)(inf + (new Random().nextGaussian()));
-        int exp = infection.getExposedPeriod()/24;
-        exp = (int)(exp + (new Random().nextGaussian())*3);        
-        this.infection = new Infection(exp,inf);
+        this.infection = new Infection(infection);
     }
 
     public HealthStatus getHealthStatus(){
@@ -217,54 +213,38 @@ public class Agent {
         }
     }
     
-    private void travel(Place source, Place dest){
-        Route route = new Route(source,dest);
+    private void travel(Place src, Place dest){
+        Route route = new Route(src,dest);
         Area a = route.getNextArea();
         this.currentPlace.setArea(a);
         this.currentPlace.setBuilding(-1);
     }
     
     private void goSleep(){
-        if(this.currentPlace.getArea()!=this.homePlace.getArea()){
-            //System.out.println("TRAVELING TO HOME FOR SLEEP "+this.healthStatus);
+        if(this.currentPlace.getArea()!=this.homePlace.getArea())
             travel(this.currentPlace,this.homePlace);
-        }
-        else{
-            this.setCurrentPlace(homePlace);
-            //System.out.println("SLEEPING "+this.healthStatus);
-        }
+        else
+            this.setCurrentPlace(this.homePlace);
     }    
     
     private void goRest(){
-        if(this.currentPlace.getArea()!=this.homePlace.getArea()){
-            //System.out.println("TRAVELING TO HOME "+this.healthStatus);
+        if(this.currentPlace.getArea()!=this.homePlace.getArea())
             travel(this.currentPlace,this.homePlace);
-        }
-        else{
-            this.setCurrentPlace(homePlace);
-            //System.out.println("JUST WENT HOME TO REST " +this.healthStatus);
-        }
+        else
+            this.setCurrentPlace(this.homePlace);
     }    
     
     private void goWork(){
-        if(this.currentPlace.getArea()!=this.workingPlace.getArea()){
-            //System.out.println("TRAVELING TO WORK "+this.healthStatus);
+        if(this.currentPlace.getArea()!=this.workingPlace.getArea())
             travel(this.currentPlace,this.workingPlace);
-        }
-        else{
-            this.setCurrentPlace(workingPlace);
-            //System.out.println("JUST WENT TO WORK "+this.healthStatus);
-        }        
+        else
+            this.setCurrentPlace(this.workingPlace);
     }
 
     private void goLeasure(){
-        if(this.currentPlace.getArea()!=this.leisurePlace.getArea()){
-            //System.out.println("TRAVELING TO LEISURE "+this.healthStatus);
+        if(this.currentPlace.getArea()!=this.leisurePlace.getArea())
             travel(this.currentPlace,this.leisurePlace);
-        }
-        else{
+        else
             this.setCurrentPlace(leisurePlace);
-            //System.out.println("JUST WENT FOR LEISURE "+this.healthStatus);
-        }
     }    
 }

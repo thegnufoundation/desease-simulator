@@ -24,9 +24,7 @@
 package dsmv_simulation;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
 
 /**
  *
@@ -84,19 +82,20 @@ public class Building {
     
     public int countInfected(){
         int total_infected = 0;
-        for(Agent a : agents){
-            if(isAgentInside(a) && a.getHealthStatus()==HealthStatus.INFECTIOUS)
-                total_infected++;
-        }
+        total_infected = agents.stream().filter((a) 
+                -> (isAgentInside(a) && a.getHealthStatus()==HealthStatus.INFECTIOUS))
+                .map((_item) -> 1).reduce(total_infected, Integer::sum);
         return total_infected;
     }
     
     public float getInfectionRate(){
-        float rate;
-        rate = this.countAgentsInside()/this.capacity;
+        float rate = (float) (this.countAgentsInside()/(1.2*this.capacity));
         if(this.countAgentsInside()==0)
-            return 0;
-        rate = rate * this.countInfected()/this.countAgentsInside();
+            rate = 0;
+        else{
+            rate = rate * this.countInfected()/this.countAgentsInside();
+            rate = (float)(rate *0.9);
+        }
         return rate;
     }
     
@@ -106,10 +105,9 @@ public class Building {
     
     private int countAgentsInside(){
         int count = 0;
-        for(Agent a : this.agents){
-            if(a.getCurrentPlace().equals(this.buildingPlace))
-                count++;
-        }
+        count = this.agents.stream().filter((a) 
+                -> (a.getCurrentPlace().equals(this.buildingPlace)))
+                .map((_item) -> 1).reduce(count, Integer::sum);
         return count;
     }
     
@@ -117,7 +115,7 @@ public class Building {
         int totalNewInfected = (int)(countAgentsInside()*getInfectionRate());
         for (Agent a : agents) {
             if(totalNewInfected>0){
-                if(isAgentInside(a) && a.getHealthStatus()==HealthStatus.SUSPECTIBLE && new Random().nextDouble()<0.05){
+                if(isAgentInside(a) && a.getHealthStatus()==HealthStatus.SUSPECTIBLE){
                     a.Infect(infection);
                     totalNewInfected--;
                 }

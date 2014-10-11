@@ -23,38 +23,93 @@
  */
 package dsmv_simulation;
 
+import java.util.Random;
+
 /**
  *
  * @author Christos Petropoulos, Paula Subías
  */
 public class Infection {
-    private int exposedPeriod;
-    private int infectedPeriod;
     
-    public Infection(int exposedPeriod, int infectedPeriod){
+    private int transitionPeriod, exposedPeriod, infectedPeriod;
+    private final int tSTD, eSTD, iSTD, tpMean;
+
+    public Infection(int transPeriod,int exposedPeriod,int infectedPeriod,int tSTD,int eSTD,int iSTD){
+        this.tSTD = tSTD;
+        this.eSTD = eSTD;
+        this.iSTD = iSTD;
+        this.tpMean = transPeriod;
         this.exposedPeriod = exposedPeriod*24;
         this.infectedPeriod = infectedPeriod*24;
+        this.transitionPeriod = (int)(this.tpMean+(new Random().nextGaussian())*tSTD);
     }
     
     public Infection(Infection infection){
+        int exp_days = infection.getExposedPeriod()/24;
+        int inf_days = infection.getInfectedPeriod()/24;
+        exp_days = (int)(exp_days + (new Random().nextGaussian())*infection.getESTD()); 
+        inf_days = (int)(inf_days + (new Random().nextGaussian()*infection.getISTD()));        
+        this.tSTD = infection.getTSTD();
+        this.eSTD = infection.getESTD();
+        this.iSTD = infection.getISTD();
+        this.tpMean = infection.getTPMean();
         this.exposedPeriod = infection.getExposedPeriod();
         this.infectedPeriod = infection.getInfectedPeriod();
+        this.transitionPeriod = infection.getTrantitionPeriod();
+        this.exposedPeriod = exp_days*24;
+        this.infectedPeriod = inf_days*24;
+        this.transitionPeriod = (int) (this.tpMean+(new Random().nextGaussian())*tSTD);
+    }
+ 
+    public Infection clone(Infection infection){
+        int ctSTD = infection.getTSTD();
+        int ceSTD = infection.getESTD();
+        int ciSTD = infection.getISTD();
+        int exp_days = infection.getExposedPeriod()/24;
+        int inf_days = infection.getInfectedPeriod()/24;
+        int tpm = infection.getTPMean();
+        Infection cp = new Infection(tpm,exp_days,inf_days,ctSTD,ceSTD,ciSTD);
+        return cp;
     }
     
     public void clock(){
-        if(exposedPeriod>0)
-            exposedPeriod--;
-        else if(infectedPeriod>0)
-            infectedPeriod--;
+        if(this.transitionPeriod>0)
+            this.transitionPeriod--;
+        else if(this.exposedPeriod>0)
+            this.exposedPeriod--;
+        else if(this.infectedPeriod>0)
+            this.infectedPeriod--;
     }    
     
     public HealthStatus getInfectionStatus(){
-        if(exposedPeriod>0)
+        if(this.transitionPeriod>0)
+            return HealthStatus.SUSPECTIBLE;
+        else if(this.exposedPeriod>0)
             return HealthStatus.EXPOSED;
-        else if(infectedPeriod>0)
+        else if(this.infectedPeriod>0)
             return HealthStatus.INFECTIOUS;
         else
             return HealthStatus.RECOVERED;
+    }
+    
+    public int getTPMean(){
+        return this.tpMean;
+    }
+    
+    public int getTSTD(){
+        return this.tSTD;
+    }
+    
+    public int getISTD(){
+        return this.iSTD;
+    }
+    
+    public int getESTD(){
+        return this.eSTD;
+    }
+    
+    public int getTrantitionPeriod(){
+        return this.transitionPeriod;
     }
     
     public int getExposedPeriod(){

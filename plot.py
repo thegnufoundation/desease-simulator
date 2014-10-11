@@ -6,6 +6,10 @@ data = sys.stdin.readlines()
 
 # Compute the population.
 population = data[0].split()
+
+if(int(population[0])==-1):
+	exit()
+
 population = int(population[0]) + int(population[1]) + int(population[2]) + int(population[3])
 population = population*1.0
 
@@ -28,6 +32,8 @@ for i in range(0,len(data)):
     R.append(int(m[3])/population)
 
 # Create the plot.
+axes = plt.gca()
+axes.set_ylim([0,1.5])
 plt.plot(t,S,linewidth=2,label="Suspectible")
 plt.plot(t,E,linewidth=2,label="Exposured")
 plt.plot(t,I,linewidth=2,label="Infected")

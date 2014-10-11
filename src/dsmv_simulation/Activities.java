@@ -42,11 +42,7 @@ public class Activities {
     public void setWorkingHours(int hours){
         this.activity_hours[0] = hours;
     }
-    
-    //public void setCommutingHours(int hours){
-    //    this.activity_hours[1]  = hours;
-    //}
-    
+
     public void setLeisuringHours(int hours){
         this.activity_hours[1]  = hours;
     }
@@ -62,11 +58,7 @@ public class Activities {
     public void decreaseWorkingHours(){
         this.activity_hours[0]--;
     }
-    
-    //public void decreaseCommutingTime(){
-    //    this.activity_hours[1]--;
-    //}
-    
+
     public void decreaseLeisuringHours(){
         this.activity_hours[1]--;
     }
@@ -94,11 +86,7 @@ public class Activities {
     public int getWorkingHours(){
         return this.activity_hours[0];
     }
-    
-    //public int getCommutingHours(){
-    //    return this.activity_hours[1];
-    //}
-    
+
     public int getLeisuringHours(){
         return this.activity_hours[1];
     }
@@ -130,6 +118,6 @@ public class Activities {
     
     public void print(){
         System.out.println("sleep:"+this.getSleepingHours()+" work:"+this.getWorkingHours()
-                            +" leisure:"+this.getLeisuringHours()+" rest:"+this.getRestingHours());
+                          +" leisure:"+this.getLeisuringHours()+" rest:"+this.getRestingHours());
     }
 }

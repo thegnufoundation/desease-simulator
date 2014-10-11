@@ -23,6 +23,8 @@
  */
 package dsmv_simulation;
 
+import java.util.Scanner;
+
 /**
  *
  * @author Christos Petropoulos, Paula Subías
@@ -35,29 +37,46 @@ public class Simulation {
     public static void main(String[] args) {
          
         int SEIR[];
-        int days = Integer.parseInt(args[0]);
         int currentHours = 0;
-        int totalHours = days*24;
-        int population = Integer.parseInt(args[1]);
-        int infected = Integer.parseInt(args[2]);
+        final int days,population,infected,totalHours;
+        final Infection  infection = new Infection(15,3,12,9,1,4);
         
-        // if arguments not given, print message to give arguments 
+        if(args.length<3){
+            Scanner in = new Scanner(System.in);
+            System.err.print("Days:");
+            days = in.nextInt();
+            System.err.print("Population:");
+            population = in.nextInt();
+            System.err.print("Infected:");
+            infected = in.nextInt();
+        }
+        else{
+            days = Integer.parseInt(args[0]);
+            population = Integer.parseInt(args[1]);
+            infected = Integer.parseInt(args[2]);
+        }
+        totalHours = days*24;
         
-        Infection infection = new Infection(2,10);
-        
+        if(infected>population){
+            System.err.println("Error: The number of infected people has to be less than the whole population.");
+            System.out.println("-1");
+            return;
+        }
+
         System.err.println("Starting simulation for a period of ("+days+") days.");
-        System.err.println("Parameters = {population="+population+ ", infected="+infected +"}");
-        
+        System.err.println("Parameters = {population="+population+", infected="+infected +"}");        
+        System.err.print("Initializing...\r");
         City city = new City(population,infected,infection);
-    
-  
+        System.err.print("Initializing...(DONE)\r\n");
+        
         while(currentHours<totalHours){
-            city.clock();
-            currentHours++;
             SEIR = city.getSEIR();
             System.out.println(SEIR[0]+" "+SEIR[1]+" "+SEIR[2]+" "+SEIR[3]);
-            System.err.print("Simulation in process...("+100*currentHours/totalHours+"%)\r");
+            city.clock();
+            currentHours++;
+            System.err.print("Simulation in process...("+100*currentHours/totalHours+"%)\r");            
         }
+        
         System.err.print("Simulation in process...(DONE)\r\n");
         System.err.println("[Simulation completed]");
     }
