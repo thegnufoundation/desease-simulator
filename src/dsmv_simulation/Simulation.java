@@ -39,7 +39,9 @@ public class Simulation {
         int SEIR[];
         int currentHours = 0;
         final int days,population,infected,totalHours;
-        final Infection  infection = new Infection(15,2,12,9,1,4);
+        
+        //(int transPeriod,int exposedPeriod,int infectedPeriod,int tSTD,int eSTD,int iSTD)
+        final Infection infection = new Infection(15,5,14,9,4,7);
         
         if(args.length<3){
             Scanner in = new Scanner(System.in);

@@ -26,19 +26,19 @@ R = []
 
 for i in range(0,len(data)):
     m = data[i].split()
-    S.append(int(m[0])/population)
-    E.append(int(m[1])/population)
-    I.append(int(m[2])/population)
-    R.append(int(m[3])/population)
+    S.append(int(m[0]))
+    E.append(int(m[1]))
+    I.append(int(m[2]))
+    R.append(int(m[3]))
 
 # Create the plot.
 axes = plt.gca()
-axes.set_ylim([0,1.5])
+axes.set_ylim([0,population+population*0.4])
 plt.plot(t,S,linewidth=2,label="Suspectible")
 plt.plot(t,E,linewidth=2,label="Exposured")
 plt.plot(t,I,linewidth=2,label="Infected")
 plt.plot(t,R,linewidth=2,label="Recovered")
 plt.ylabel('population')
-plt.ylabel('days')
+plt.xlabel('days')
 plt.legend()
 plt.show()

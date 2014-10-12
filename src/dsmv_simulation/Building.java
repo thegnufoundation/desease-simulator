@@ -25,6 +25,7 @@ package dsmv_simulation;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  *
@@ -32,7 +33,7 @@ import java.util.List;
  */
 public class Building {
     
-    private final int capacity;
+    public final int capacity;
     private final Place buildingPlace;
     private List<Agent> agents;
     public int availability;
@@ -88,13 +89,12 @@ public class Building {
         return total_infected;
     }
     
-    public float getInfectionRate(){
-        float rate = (float) (this.countAgentsInside()/(1.2*this.capacity));
-        if(this.countAgentsInside()==0)
-            rate = 0;
-        else{
+    public double getInfectionRate(){
+        double rate = 0;
+        if(this.countAgentsInside()!=0){
+            rate = (this.countAgentsInside()/(this.capacity));
             rate = rate * this.countInfected()/this.countAgentsInside();
-            rate = (float)(rate *0.9);
+            rate = rate *0.9;
         }
         return rate;
     }
@@ -112,16 +112,12 @@ public class Building {
     }
     
     public void clock(Infection infection){
-        int totalNewInfected = (int)(countAgentsInside()*getInfectionRate());
-        for (Agent a : agents) {
-            if(totalNewInfected>0){
-                if(isAgentInside(a) && a.getHealthStatus()==HealthStatus.SUSPECTIBLE){
+        double infProb = getInfectionRate();
+        agents.stream().filter((a) -> (isAgentInside(a) 
+                && a.getHealthStatus()==HealthStatus.SUSPECTIBLE 
+                && new Random().nextDouble()<infProb)).forEach((a) -> 
+                {
                     a.Infect(infection);
-                    totalNewInfected--;
-                }
-            }
-            else
-                break;
-        }  
+                });  
     }
 }

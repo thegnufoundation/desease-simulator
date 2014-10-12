@@ -42,9 +42,9 @@ public class City {
     
     public City(int population,int infected,Infection infection) {
         this.infection = infection;
-        this.setLeisureBuildings(10);
-        this.setWorkBuildings(20);
-        this.setHomeBuildings((int)(population/2));
+        this.setLeisureBuildings((int)population/100);
+        this.setWorkBuildings((int)population/32);
+        this.setHomeBuildings((int)(population/4));
         this.setAgents(population);
         for(int i=0;i<infected;i++){
             agents[i].Infect(infection);
@@ -72,13 +72,12 @@ public class City {
     }
     
     private Agent generateAgent() {
-        
-        int pos = (int)( 5 + (new Random().nextGaussian()) * 3);
+        int pos = (int)( 7 + (new Random().nextGaussian()) * 2);
         int workingHours = pos;
-       pos = (int)( 5 + (new Random().nextGaussian()) * 3);
+        pos = (int)( 7 + (new Random().nextGaussian()) * 1);
         int sleepingHours = pos;
         int homeBuildingID = this.currentHomeID;
-        int workBuildingID = getBuildingMax();
+        int workBuildingID = getNextBuildingID();
         double leisureProb = new Random().nextDouble();
         Place workPlace = this.workBuildings[workBuildingID].getPlace();
         Place homePlace = this.homeBuildings[homeBuildingID].getPlace();
@@ -90,7 +89,7 @@ public class City {
         return a;
     }
 
-    private int getBuildingMax(){
+    private int getNextBuildingID(){
         int max = -1;
         int max_id = -1;
         for(int i=0;i<this.workBuildings.length;i++){
@@ -145,7 +144,6 @@ public class City {
         for(i=0;i<this.publicPlaces.length;i++){
             this.publicPlaces[i].clock(this.infection);
         }
-        
         for(i=0;i<this.agents.length;i++){
             this.agents[i].clock();
         }   
