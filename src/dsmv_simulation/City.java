@@ -47,7 +47,7 @@ public class City {
         this.setHomeBuildings((int)(population/4));
         this.setAgents(population);
         for(int i=0;i<infected;i++){
-            agents[i].Infect(infection);
+            agents[i].Infect(infection,0);
         }
         setPublicAreas();
     }

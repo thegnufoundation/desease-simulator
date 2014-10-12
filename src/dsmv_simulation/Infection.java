@@ -45,22 +45,16 @@ public class Infection {
     }
     
     public Infection(Infection infection){
-        int exp_days = infection.getExposedPeriod()/24;
-        int inf_days = infection.getInfectedPeriod()/24;
-        //exp_days = (int)(exp_days + (new Random().nextGaussian())*infection.getESTD()); 
-        //inf_days = (int)(inf_days + (new Random().nextGaussian()*infection.getISTD()));        
+        int exp_days = infection.getExposedPeriod() ;
+        int inf_days = infection.getInfectedPeriod() ;
+        exp_days = (int)(exp_days + 24*(new Random().nextGaussian())*infection.getESTD()); 
+        inf_days = (int)(inf_days + 24*(new Random().nextGaussian())*infection.getISTD());        
         this.tSTD = infection.getTSTD();
         this.eSTD = infection.getESTD();
         this.iSTD = infection.getISTD();
         this.tpMean = infection.getTPMean();
-        this.exposedPeriod = infection.getExposedPeriod();
-        this.infectedPeriod = infection.getInfectedPeriod();
-        this.transitionPeriod = infection.getTrantitionPeriod();
-        if((new Random().nextBoolean()))
-            this.exposedPeriod = exp_days*24+(new Random().nextInt(3)*24);
-        else
-            this.exposedPeriod = exp_days*24-(new Random().nextInt(3)*24);
-        this.infectedPeriod = inf_days*24+(int)(new Random().nextGaussian()*infection.getISTD()*24);
+        this.exposedPeriod = exp_days ;
+        this.infectedPeriod = inf_days ;
         this.transitionPeriod = (int) (this.tpMean+(new Random().nextGaussian())*tSTD);
     }
  
@@ -73,6 +67,10 @@ public class Infection {
         int tpm = infection.getTPMean();
         Infection cp = new Infection(tpm,exp_days,inf_days,ctSTD,ceSTD,ciSTD);
         return cp;
+    }
+    
+    public void setTP(int tp){
+        this.transitionPeriod = tp;
     }
     
     public void clock(){

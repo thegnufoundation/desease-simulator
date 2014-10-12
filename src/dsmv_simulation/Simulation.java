@@ -41,7 +41,7 @@ public class Simulation {
         final int days,population,infected,totalHours;
         
         //(int transPeriod,int exposedPeriod,int infectedPeriod,int tSTD,int eSTD,int iSTD)
-        final Infection infection = new Infection(15,5,14,9,4,7);
+        final Infection infection = new Infection(15,10,7,8,2,1);
         
         if(args.length<3){
             Scanner in = new Scanner(System.in);
@@ -72,11 +72,11 @@ public class Simulation {
         System.err.print("Initializing...(DONE)\r\n");
         
         while(currentHours<totalHours){
-            SEIR = city.getSEIR();
-            System.out.println(SEIR[0]+" "+SEIR[1]+" "+SEIR[2]+" "+SEIR[3]);
             city.clock();
-            currentHours++;
-            System.err.print("Simulation in process...("+100*currentHours/totalHours+"%)\r");            
+            currentHours++;      
+            SEIR = city.getSEIR();
+            System.out.println(SEIR[0]+" "+SEIR[1]+" "+SEIR[2]+" "+SEIR[3]); 
+            System.err.print("Simulation in process...("+100*currentHours/totalHours+"%)\r"); 
         }
         
         System.err.print("Simulation in process...(DONE)\r\n");

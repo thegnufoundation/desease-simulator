@@ -64,7 +64,12 @@ public class Agent {
     public void Infect(Infection infection){
         this.infection = new Infection(infection);
     }
-
+    
+    public void Infect(Infection infection,int tp){
+        this.infection = new Infection(infection);
+        this.infection.setTP(tp);
+    }
+    
     public HealthStatus getHealthStatus(){
         return this.healthStatus;
     }
