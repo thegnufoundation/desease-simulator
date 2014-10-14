@@ -41,7 +41,7 @@ public class Simulation {
         final int days,population,infected,totalHours;
         
         //(int transPeriod,int exposedPeriod,int infectedPeriod,int tSTD,int eSTD,int iSTD)
-        final Infection infection = new Infection(15,10,7,8,2,1);
+        final Infection infection = new Infection(15,14,7,8,3.5,1);
         
         if(args.length<3){
             Scanner in = new Scanner(System.in);

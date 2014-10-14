@@ -31,10 +31,10 @@ import java.util.Random;
  */
 public class Infection {
     
-    private int transitionPeriod, exposedPeriod, infectedPeriod;
-    private final int tSTD, eSTD, iSTD, tpMean;
+    private int transitionPeriod, exposedPeriod, infectedPeriod,tpMean;
+    private final double tSTD, eSTD, iSTD  ;
 
-    public Infection(int transPeriod,int exposedPeriod,int infectedPeriod,int tSTD,int eSTD,int iSTD){
+    public Infection(int transPeriod,int exposedPeriod,int infectedPeriod,double tSTD,double eSTD,double iSTD){
         this.tSTD = tSTD;
         this.eSTD = eSTD;
         this.iSTD = iSTD;
@@ -47,8 +47,8 @@ public class Infection {
     public Infection(Infection infection){
         int exp_days = infection.getExposedPeriod() ;
         int inf_days = infection.getInfectedPeriod() ;
-        exp_days = (int)(exp_days + 24*(new Random().nextGaussian())*infection.getESTD()); 
-        inf_days = (int)(inf_days + 24*(new Random().nextGaussian())*infection.getISTD());        
+        exp_days = (int)(exp_days + 24*getNextGuassian()*infection.getESTD());
+        inf_days = (int)(inf_days + 24*getNextGuassian()*infection.getISTD());
         this.tSTD = infection.getTSTD();
         this.eSTD = infection.getESTD();
         this.iSTD = infection.getISTD();
@@ -57,11 +57,20 @@ public class Infection {
         this.infectedPeriod = inf_days ;
         this.transitionPeriod = (int) (this.tpMean+(new Random().nextGaussian())*tSTD);
     }
- 
+    
+    private double getNextGuassian(){
+        double gaussian = new Random().nextGaussian();
+        if(gaussian<-2)
+            gaussian = -2;
+        else if(gaussian>2)
+            gaussian = 2;
+        return gaussian;
+    }
+
     public Infection clone(Infection infection){
-        int ctSTD = infection.getTSTD();
-        int ceSTD = infection.getESTD();
-        int ciSTD = infection.getISTD();
+        double ctSTD = infection.getTSTD();
+        double ceSTD = infection.getESTD();
+        double ciSTD = infection.getISTD();
         int exp_days = infection.getExposedPeriod()/24;
         int inf_days = infection.getInfectedPeriod()/24;
         int tpm = infection.getTPMean();
@@ -97,15 +106,15 @@ public class Infection {
         return this.tpMean;
     }
     
-    public int getTSTD(){
+    public double getTSTD(){
         return this.tSTD;
     }
     
-    public int getISTD(){
+    public double getISTD(){
         return this.iSTD;
     }
     
-    public int getESTD(){
+    public double getESTD(){
         return this.eSTD;
     }
     
