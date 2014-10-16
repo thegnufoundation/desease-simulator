@@ -37,13 +37,23 @@ class SEIR_Model():
         E = Y[:, 1]
         I = Y[:, 2]
         R = Y[:, 3]
-        data_file = open('seir.dat', 'w')
+        data_file = open('seir_data_120_1.dat', 'w')
 
+	i = 0.0
         for point in Y:
-            data_file.write('%f %f %f %f\n'%(point[0],point[1],point[2],point[3]))
-            
+            ctime = (120.0/999.0)*i
+            data_file.write('%f %f %f %f %f\n'%(ctime,point[0],point[1],point[2],point[3]))
+            i = i + 1.0
+	
+	axes = pylab.gca()
+	p = S[0]+1
+	axes.set_ylim([0,p+p*0.4])
+		
         pylab.figure()
         pylab.plot(t, S, t, E, t, I, t, R)
+        axes = pylab.gca()
+        p = S[0]+1
+        axes.set_ylim([0,p+p*0.4])
         pylab.xlabel('Time')
         pylab.ylabel('Population')
         pylab.legend([ 'Susceptible', 'Exposed', 'Infectious', 'Recovered' ])
@@ -61,4 +71,4 @@ if __name__ == "__main__":
     R0 = 0
     Y0 = [ S0, E0, I0, R0 ]
     s = SEIR_Model(beta,gamma,mu,a,Y0)
-    s.simulate(100)
+    s.simulate(120)

@@ -7,10 +7,10 @@ data = sys.stdin.readlines()
 # Compute the population.
 population = data[0].split()
 
-if(int(population[0])==-1):
+if(float(population[0])==-1):
 	exit()
 
-population = int(population[0]) + int(population[1]) + int(population[2]) + int(population[3])
+population = int(population[1]) + int(population[2]) + int(population[3]) + int(population[4])
 population = population*1.0
 
 # Compute the number of simulation days.
@@ -26,10 +26,10 @@ R = []
 
 for i in range(0,len(data)):
     m = data[i].split()
-    S.append(int(m[0]))
-    E.append(int(m[1]))
-    I.append(int(m[2]))
-    R.append(int(m[3]))
+    S.append(int(m[1]))
+    E.append(int(m[2]))
+    I.append(int(m[3]))
+    R.append(int(m[4]))
 
 # Create the plot.
 axes = plt.gca()

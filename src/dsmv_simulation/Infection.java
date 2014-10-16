@@ -32,7 +32,7 @@ import java.util.Random;
 public class Infection {
     
     private int transitionPeriod, exposedPeriod, infectedPeriod,tpMean;
-    private final double tSTD, eSTD, iSTD  ;
+    private final double tSTD, eSTD, iSTD;
 
     public Infection(int transPeriod,int exposedPeriod,int infectedPeriod,double tSTD,double eSTD,double iSTD){
         this.tSTD = tSTD;

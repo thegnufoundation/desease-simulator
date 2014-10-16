@@ -39,8 +39,7 @@ public class Simulation {
         int SEIR[];
         int currentHours = 0;
         final int days,population,infected,totalHours;
-        
-        //(int transPeriod,int exposedPeriod,int infectedPeriod,int tSTD,int eSTD,int iSTD)
+
         final Infection infection = new Infection(15,14,7,8,3.5,1);
         
         if(args.length<3){
@@ -58,10 +57,10 @@ public class Simulation {
             infected = Integer.parseInt(args[2]);
         }
         totalHours = days*24;
-        
+  
         if(infected>population){
             System.err.println("Error: The number of infected people has to be less than the whole population.");
-            System.out.println("-1");
+            System.out.println("-1.0");
             return;
         }
 
@@ -71,11 +70,11 @@ public class Simulation {
         City city = new City(population,infected,infection);
         System.err.print("Initializing...(DONE)\r\n");
         
-        while(currentHours<totalHours){
+        while(currentHours<=totalHours){
             city.clock();
-            currentHours++;      
             SEIR = city.getSEIR();
-            System.out.println(SEIR[0]+" "+SEIR[1]+" "+SEIR[2]+" "+SEIR[3]); 
+            System.out.println(days*(1.0*currentHours/(1.0*totalHours))+" "+SEIR[0]+" "+SEIR[1]+" "+SEIR[2]+" "+SEIR[3]); 
+            currentHours++;  
             System.err.print("Simulation in process...("+100*currentHours/totalHours+"%)\r"); 
         }
         
