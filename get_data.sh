@@ -1,4 +1,4 @@
-for i in {1..50}
+for i in {51..100}
 do
 	fname='agent_sim_'$i'.txt'
    	echo 'Will be saving to:./data/'$fname'\n'

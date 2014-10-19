@@ -78,7 +78,7 @@ public class City {
         int sleepingHours = pos;
         int homeBuildingID = this.currentHomeID;
         int workBuildingID = getNextBuildingID();
-        double leisureProb = new Random().nextDouble();
+        double leisureProb = 0.4+new Random().nextGaussian()*0.1;
         Place workPlace = this.workBuildings[workBuildingID].getPlace();
         Place homePlace = this.homeBuildings[homeBuildingID].getPlace();
         this.currentHomeID = (this.currentHomeID+1)%homeBuildings.length;
