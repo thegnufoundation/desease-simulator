@@ -1,2 +1,2 @@
-desease-simulator
+disease-simulator
 =================
